@@ -4,7 +4,7 @@
     "keywords": ["Edvice"],
     "homepage": "http://www.edvice.com/",
     "type": "project",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=7.0",
         "yiisoft/yii2": "~2.0.6",
