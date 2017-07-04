@@ -1,7 +1,7 @@
 <?php
 
 $host = $port = $username = $password = $dbname = '';
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$url = parse_url(getenv("DATABASE_URL"));
 if (isset($url["host"]) && isset($url["user"]) && isset($url["pass"]) && isset($url["path"])) {
     $host = $url["host"];
     $port = $url["port"];
