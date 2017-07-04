@@ -12,6 +12,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
+    'homeUrl' => '/admin',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
@@ -37,14 +38,20 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                /**
+                 * base url rules
+                 */
+                'admin/<_a:[\w\-]+>/<id:\d+>' => 'admin/<_c>/<_a>',
+
+                'login/<service:google|facebook|etc>' => 'site/login',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
