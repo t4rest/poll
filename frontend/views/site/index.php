@@ -8,7 +8,7 @@ $this->title = 'My Yii Application';
 
     <?= yii\authclient\widgets\AuthChoice::widget([
         'baseAuthUrl' => ['site/auth'],
-        'popupMode' => false,
+        'popupMode' => true,
     ]) ?>
 
 </div>

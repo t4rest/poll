@@ -4,18 +4,11 @@
     "keywords": ["Edvice"],
     "homepage": "http://www.edvice.com/",
     "type": "project",
-    "minimum-stability": "dev",
-    "require": {
+     "require": {
         "php": ">=7.0",
-
-        "ext-mbstring": "*",
-        "ext-gd": "*",
-        "yiisoft/yii2-dev": "*",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*",
-        "fxp/composer-asset-plugin": "*",
-
-
+        "yiisoft/yii2": "~2.0.6",
+        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
         "yiisoft/yii2-authclient": "~2.1.0"
     },
     "require-dev": {
