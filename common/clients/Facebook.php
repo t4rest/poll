@@ -6,8 +6,6 @@ use yii\authclient\clients\Facebook as FacebookClient;
 
 class Facebook extends FacebookClient
 {
-//    protected $baseApiUrl = 'https://graph.facebook.com/v2.8/';
-
 
     public $attributeNames = [
         'id',
