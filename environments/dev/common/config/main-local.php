@@ -1,11 +1,23 @@
 <?php
+
+
+$host = $port = $username = $password = $dbname = '';
+$url = parse_url(getenv("DATABASE_URL"));
+if (isset($url["host"]) && isset($url["user"]) && isset($url["pass"]) && isset($url["path"])) {
+    $host = $url["host"];
+    $port = $url["port"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $dbname = substr($url["path"], 1);
+}
+
 return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'pgsql:host=localhost;port=5432;dbname=edvice',
-            'username' => 'postgres',
-            'password' => '123',
+            'dsn' => 'pgsql:host=' . $host . ';port=' . $port . ';dbname=' . $dbname,
+            'username' => $username,
+            'password' => $password,
             'charset' => 'utf8',
         ],
         'mailer' => [
@@ -14,7 +26,7 @@ return [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
         ],
         'authClientCollection' => [
             'class' => 'yii\authclient\Collection',
@@ -36,3 +48,4 @@ return [
         ],
     ],
 ];
+
