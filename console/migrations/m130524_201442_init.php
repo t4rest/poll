@@ -8,22 +8,27 @@ class m130524_201442_init extends Migration
     {
         $this->createTable('user', [
             'id' => $this->primaryKey(10)->unsigned(),
-            'username' => $this->string()->notNull(),
             'auth_key' => $this->string()->notNull(),
-            'password_hash' => $this->string()->notNull(),
-            'password_reset_token' => $this->string()->notNull(),
-            'email' => $this->string()->notNull(),
+            'username' => $this->string()->notNull(),
+            'first_name' => $this->string(),
+            'last_name' => $this->string(),
+            'email' => $this->string(),
+            'photo_url' => $this->string(),
+            'timezone' => $this->smallInteger(),
+            'locale' => $this->smallInteger(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
 
         $this->createTable('auth', [
-            'id' => $this->primaryKey(10)->unsigned(),
+            'id' => $this->string()->notNull(),
+            'source_id' => $this->smallInteger()->notNull(),
             'user_id' => $this->integer(10)->notNull()->unsigned(),
-            'source' => $this->string()->notNull(),
-            'source_id' => $this->string()->notNull(),
+            'token' => $this->text()->notNull(),
+            'data' => $this->text()->notNull(),
         ]);
+        $this->addPrimaryKey('auth_pk', 'auth', ['id']);
 
         $this->addForeignKey('fk-auth-user_id-user-id', 'auth', 'user_id', 'user', 'id', 'CASCADE', 'CASCADE');
     }

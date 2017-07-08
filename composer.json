@@ -15,7 +15,7 @@
         "yiisoft/yii2-authclient": "~2.1.0",
 
         "fxp/composer-asset-plugin": "*"
-     },
+    },
 
 
     "require-dev": {
