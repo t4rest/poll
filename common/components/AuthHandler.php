@@ -54,6 +54,7 @@ class AuthHandler
                     $this->client->getUserDbAttributes($attributes)
                 );
                 $user->generateAuthKey();
+                $user->setTime();
                 $user->save();
             }
 

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helper\Time;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -21,8 +22,8 @@ use yii\web\IdentityInterface;
  * @property string $timezone
  * @property string $locale
  * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+ * @property string $created_at
+ * @property string $updated_at
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -34,11 +35,20 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
-    public function behaviors()
+//    public function behaviors()
+//    {
+//        return [
+//            TimestampBehavior::className(),
+//        ];
+//    }
+
+    public function setTime()
     {
-        return [
-            TimestampBehavior::className(),
-        ];
+        $time = Time::getCurrentTime();
+        if ($this->isNewRecord) {
+            $this->created_at = $time;
+        }
+        $this->updated_at = $time;
     }
 
     public function rules()
