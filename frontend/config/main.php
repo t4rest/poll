@@ -46,8 +46,6 @@ return [
                  * base url rules
                  */
                 '<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
-
-                'login/<service:google|facebook|etc>' => 'site/login',
             ],
         ],
     ],

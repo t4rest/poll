@@ -2,17 +2,18 @@
 
 namespace common\models;
 
-use yii;
+use Yii;
 
 /**
  * This is the model class for table "{{%auth}}".
  *
  * @property string $id
- * @property int $user_id
  * @property int $source_id
+ * @property int $user_id
  * @property string $token
  * @property string $data
  *
+ * @property AuthSource $source
  * @property User $user
  */
 class Auth extends \yii\db\ActiveRecord
@@ -31,10 +32,13 @@ class Auth extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'source_id', 'id'], 'required'],
-            [['user_id', 'source_id'], 'integer'],
+            [['id', 'source_id', 'user_id', 'token', 'data'], 'required'],
+            [['source_id', 'user_id'], 'default', 'value' => null],
+            [['source_id', 'user_id'], 'integer'],
             [['token', 'data'], 'string'],
-            [['id'], 'string', 'max' => 255],
+            [['id'], 'string', 'max' => 128],
+            [['id'], 'unique'],
+            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => AuthSource::className(), 'targetAttribute' => ['source_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -46,8 +50,8 @@ class Auth extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
             'source_id' => 'Source ID',
+            'user_id' => 'User ID',
             'token' => 'Token',
             'data' => 'Data',
         ];
@@ -56,17 +60,16 @@ class Auth extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getSource()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(AuthSource::className(), ['id' => 'source_id']);
     }
 
     /**
-     * @inheritdoc
-     * @return AuthQuery the active query used by this AR class.
+     * @return \yii\db\ActiveQuery
      */
-    public static function find()
+    public function getUser()
     {
-        return new AuthQuery(get_called_class());
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
