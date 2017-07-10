@@ -15,7 +15,7 @@ class Twitter extends TwitterClient implements ClintInterface
     /**
      * @return int]
      */
-    public function getClientId():int
+    public function getClientId(): int
     {
         return self::ID;
     }

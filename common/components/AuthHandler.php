@@ -60,17 +60,16 @@ class AuthHandler
 
             Yii::$app->user->login($user);
 
-        } else {
-
-            if ($authNetwork && $authNetwork->user_id != Yii::$app->user->id) {
-                throw new Exception(Yii::t('app', 'Unable to link {client} account. There is another user using it.', ['client' => $this->client->getTitle()]));
-            }
+        } else if ($authNetwork && $authNetwork->user_id != Yii::$app->user->id) {
+            throw new Exception(Yii::t('app', 'Unable to link {client} account. There is another user using it.', ['client' => $this->client->getTitle()]));
         }
 
         $this->saveAuthClient($authNetwork, $attributes);
 
-        return 123;
-//        return Yii::$app->user->getAuthKey();
+        Yii::$app->session->set(
+            'auth_token',
+            Yii::$app->user->getIdentity()->getAuthKey()
+        );
     }
 
     /**

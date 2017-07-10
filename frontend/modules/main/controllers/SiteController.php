@@ -1,10 +1,9 @@
 <?php
-namespace frontend\controllers;
+namespace frontend\modules\main\controllers;
 
+use frontend\modules\main\components\MainController;
 use Yii;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use common\clients\Facebook;
 use yii\filters\AccessControl;
 use frontend\models\ContactForm;
 use common\components\AuthHandler;
@@ -12,7 +11,7 @@ use common\components\AuthHandler;
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends MainController
 {
     /**
      * @inheritdoc
@@ -59,7 +58,7 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
             'auth' => [
-                'class' => 'yii\authclient\AuthAction',
+                'class' => 'common\clients\AuthAction',
                 'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
@@ -67,9 +66,7 @@ class SiteController extends Controller
 
     public function onAuthSuccess($client)
     {
-        $token = (new AuthHandler($client))->handle();
-
-        return $this->render('connect', ['token' => $token]);
+        (new AuthHandler($client))->handle();
     }
 
     /**

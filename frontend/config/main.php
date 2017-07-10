@@ -10,8 +10,8 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'frontend\controllers',
-    'defaultRoute' => 'site/index',
+    'defaultRoute' => 'main/default/index',
+    'modules' => require(__DIR__ . '/modules.php'),
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -37,17 +37,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-                /**
-                 * base url rules
-                 */
-                '<_c:[\w\-]+>/<_a:[\w\-]+>/<id:\d+>' => '<_m>/<_c>/<_a>',
-            ],
-        ],
+        'urlManager' => require(__DIR__ . '/urlManager.php'),
     ],
     'params' => $params,
 ];
