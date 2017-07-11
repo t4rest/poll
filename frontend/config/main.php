@@ -10,7 +10,7 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'defaultRoute' => 'main/default/index',
+    'defaultRoute' => 'main/site/index',
     'modules' => require(__DIR__ . '/modules.php'),
     'components' => [
         'request' => [
@@ -35,7 +35,8 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'class' => '\common\exceptions\ErrorHandler',
+            'errorAction' => 'main/site/error',
         ],
         'urlManager' => require(__DIR__ . '/urlManager.php'),
     ],

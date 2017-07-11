@@ -4,7 +4,7 @@ namespace common\exceptions;
 class AccessException extends ApisException
 {
     const CODES_GROUP = 1;
-    const CODES_BASE_CLASS = 'backend\api\exceptions\codes\Access';
+    const CODES_BASE_CLASS = 'common\exceptions\codes\Access';
 
     /**
      * @return AccessException

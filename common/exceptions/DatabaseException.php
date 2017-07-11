@@ -4,7 +4,7 @@ namespace common\exceptions;
 class DatabaseException extends ApisException{
 
     const CODES_GROUP=2;
-    const CODES_BASE_CLASS='backend\api\exceptions\codes\Database';
+    const CODES_BASE_CLASS='common\exceptions\codes\Database';
 
     /**
      * @param null $message

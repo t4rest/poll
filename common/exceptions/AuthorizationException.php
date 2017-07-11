@@ -4,7 +4,7 @@ namespace common\exceptions;
 class AuthorizationException extends ApisException
 {
     const CODES_GROUP = 102;
-    const CODES_BASE_CLASS = 'backend\api\exceptions\codes\Access';
+    const CODES_BASE_CLASS = 'common\exceptions\codes\Access';
 
     /**
      * @return AuthorizationException

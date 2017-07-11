@@ -80,7 +80,7 @@ abstract class ApisException extends HttpException
      * @return object
      * @throws Exception
      */
-    private static function _createCodeBaseInstance(): object
+    private static function _createCodeBaseInstance()
     {
         $codesBaseClassName = static::CODES_BASE_CLASS;
         if (empty($codesBaseClassName)) {

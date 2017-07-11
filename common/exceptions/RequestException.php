@@ -1,12 +1,12 @@
 <?php
 namespace common\exceptions;
 
-use backend\api\exceptions\codes\Request;
+use common\exceptions\codes\Request;
 
 class RequestException extends ApisException
 {
     const CODES_GROUP = 5;
-    const CODES_BASE_CLASS = 'backend\api\exceptions\codes\Request';
+    const CODES_BASE_CLASS = 'common\exceptions\codes\Request';
 
     /**
      * @param $param

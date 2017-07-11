@@ -5,7 +5,6 @@ namespace frontend\modules\api\controllers;
 use backend\modules\user\api\User;
 use frontend\modules\api\components\MainController;
 
-
 class UserController extends MainController
 {
     /**
@@ -24,14 +23,21 @@ class UserController extends MainController
     /**
      * @return array
      */
-    public function actionIndex()
+    public function actionIndex(): array
     {
-        return $this->api->info();
+        return $this->responseSuccess(
+            $this->api->info()
+        );
     }
 
-    public function actionUpdate()
+    /**
+     * @return array
+     */
+    public function actionUpdate(): array
     {
-        return $this->api->info();
+        return $this->responseSuccess(
+            $this->api->info()
+        );
     }
 
 

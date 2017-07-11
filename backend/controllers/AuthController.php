@@ -31,4 +31,16 @@ abstract class AuthController extends Controller
 
         return parent::beforeAction($action);
     }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function responseSuccess( array $data): array
+    {
+        return [
+            'status' => 'success',
+            'data' => $data
+        ];
+    }
 }
