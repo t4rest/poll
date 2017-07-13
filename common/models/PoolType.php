@@ -15,6 +15,10 @@ use Yii;
  */
 class PoolType extends \yii\db\ActiveRecord
 {
+    const POOL_TYPE_TEXT = 1;
+    const POOL_TYPE_SINGL_PHOTO = 2;
+    const POOL_TYPE_PHOTO_COMPARISON = 3;
+
     /**
      * @inheritdoc
      */
