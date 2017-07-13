@@ -1,16 +1,12 @@
 <?php
 
-namespace common\components;
+namespace common\clients;
 
-use common\clients\ClintInterface;
-use common\clients\Facebook;
-use common\clients\Twitter;
 use common\models\Auth;
 use common\models\User;
 use Yii;
 use yii\authclient\BaseOAuth;
 use yii\authclient\ClientInterface;
-use yii\base\Exception;
 
 /**
  * AuthHandler handles successful authentication via Yii auth component
@@ -42,7 +38,6 @@ class AuthHandler
     public function handle()
     {
         $attributes = $this->client->getUserAttributes();
-
         $authNetwork = Auth::findOne(['id' => $attributes['id'], 'source_id' => $this->client->getClientId()]);
 
         if (Yii::$app->user->isGuest) {
@@ -50,9 +45,7 @@ class AuthHandler
             if ($authNetwork) {
                 $user = User::findOne($authNetwork->user_id);
             } else {
-                $user = new User(
-                    $this->client->getUserDbAttributes($attributes)
-                );
+                $user = new User($this->client->getUserDbAttributes($attributes));
                 $user->generateAuthKey();
                 $user->setTime();
                 $user->save();
@@ -61,23 +54,23 @@ class AuthHandler
             Yii::$app->user->login($user);
 
         } else if ($authNetwork && $authNetwork->user_id != Yii::$app->user->id) {
-            throw new Exception(Yii::t('app', 'Unable to link {client} account. There is another user using it.', ['client' => $this->client->getTitle()]));
+            Yii::$app->session->set('auth_error', Yii::t('app', 'Unable to link {client} account. There is another user using it.', ['client' => $this->client->getTitle()]));
+            return;
         }
 
-        $this->saveAuthClient($authNetwork, $attributes);
-
-        Yii::$app->session->set(
-            'auth_token',
-            Yii::$app->user->getIdentity()->getAuthKey()
-        );
+        if($this->saveAuthClient($authNetwork, $attributes)) {
+            Yii::$app->session->set('auth_token', Yii::$app->user->getIdentity()->getAuthKey());
+        } else {
+            Yii::$app->session->set('auth_error', Yii::t('app', 'Unable to save {client} account.', ['client' => $this->client->getTitle()]));
+        }
     }
 
     /**
-     * @param Auth $authNetwork
-     * @param $attributes
-     * @return Auth
+     * @param $authNetwork
+     * @param array $attributes
+     * @return bool
      */
-    public function saveAuthClient($authNetwork, array $attributes): Auth
+    public function saveAuthClient($authNetwork, array $attributes): bool
     {
         if (!$authNetwork) {
             $authNetwork = new Auth();
@@ -89,10 +82,6 @@ class AuthHandler
         $authNetwork->token = yii\helpers\Json::encode($this->client->getAccessToken()->getParams());
         $authNetwork->data = yii\helpers\Json::encode($attributes);
 
-        if (!$authNetwork->save()) {
-            p($authNetwork->errors);
-        }
-
-        return $authNetwork;
+        return $authNetwork->save();
     }
 }

@@ -11,6 +11,7 @@ abstract class AuthController extends Controller
     public function init()
     {
         parent::init();
+        $this->enableCsrfValidation = false;
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     }
 

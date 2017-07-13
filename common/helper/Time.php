@@ -5,7 +5,9 @@ class Time
 {
     public static function getCurrentTime()
     {
-        return (new \DateTime())->format('Y-m-d H:i:s');
+        return (new \DateTime())
+            ->setTimezone(new \DateTimeZone("UTC"))
+            ->format('Y-m-d H:i:s');
     }
 
 }

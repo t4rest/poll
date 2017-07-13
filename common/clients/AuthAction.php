@@ -12,6 +12,7 @@ class AuthAction extends MainAuth
         $viewFile = __DIR__ . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'redirect.php';
         $viewData = [
             'token' => Yii::$app->session->get('auth_token'),
+            'error' => Yii::$app->session->get('auth_error'),
             'url' => $url,
             'enforceRedirect' => $enforceRedirect,
         ];

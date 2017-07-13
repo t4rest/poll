@@ -23,7 +23,13 @@ return [
 
 
         ['pattern' => 'api/user', 'verb' => 'GET', 'route' => 'api/user/index'],
-        ['pattern' => 'api/user', 'verb' => 'PUT', 'route' => 'api/user/update'],
+        ['pattern' => 'api/user', 'verb' => 'POST', 'route' => 'api/user/update'],
+        ['pattern' => 'api/user/photo', 'verb' => 'POST', 'route' => 'api/user/photo'],
+
+
+        ['pattern' => 'api/pool', 'verb' => 'GET',  'route' => 'api/user/index'],
+        ['pattern' => 'api/pool', 'verb' => 'POST', 'route' => 'api/user/update'],
+        ['pattern' => 'api/pool', 'verb' => 'PUT',  'route' => 'api/user/photo'],
 
 
         /**

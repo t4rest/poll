@@ -17,7 +17,7 @@ class Database extends BaseCodes
                 'message' => 'Failed to perform operation on record'
             ],
             self::RECORD_NOT_FOUND => [
-                'statusCode' => 500,
+                'statusCode' => 404,
                 'message' => 'Record you are trying to access does not exist'
             ]
         ];

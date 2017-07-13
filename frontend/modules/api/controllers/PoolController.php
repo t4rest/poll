@@ -2,7 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
-use backend\modules\user\api\User;
+use backend\modules\pool\api\Pool;
 use frontend\modules\api\components\MainController;
 
 class UserController extends MainController
@@ -15,7 +15,7 @@ class UserController extends MainController
     public function beforeAction($action)
     {
         if (parent::beforeAction($action)) {
-            $this->api = new User();
+            $this->api = new Pool();
         }
         return true;
     }
@@ -30,24 +30,5 @@ class UserController extends MainController
         );
     }
 
-    /**
-     * @return array
-     */
-    public function actionUpdate(): array
-    {
-        return $this->responseSuccess(
-            $this->api->update()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function actionPhoto(): array
-    {
-        return $this->responseSuccess(
-            $this->api->photo()
-        );
-    }
 
 }

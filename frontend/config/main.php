@@ -35,7 +35,6 @@ return [
             ],
         ],
         'errorHandler' => [
-            'class' => '\common\exceptions\ErrorHandler',
             'errorAction' => 'main/site/error',
         ],
         'urlManager' => require(__DIR__ . '/urlManager.php'),

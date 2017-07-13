@@ -3,6 +3,9 @@ use yii\helpers\Json;
 
 /* @var $this \yii\base\View */
 /* @var $token string */
+/* @var $error string */
+/* @var $url string */
+/* @var $enforceRedirect bool */
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +29,7 @@ use yii\helpers\Json;
 </head>
 <body>
 
-<div id="token" data-token="<?= Json::htmlEncode($token) ?>"></div>
+<div id="token" data-token="<?= Json::htmlEncode($token) ?>" data-error="<?= Json::htmlEncode($error) ?>"></div>
 
 
 </body>

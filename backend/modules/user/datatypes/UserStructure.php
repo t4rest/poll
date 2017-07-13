@@ -32,8 +32,6 @@ class UserStructure implements Structure
             'updated_at' => $this->user->updated_at,
         ];
 
-//        if($)
-
         return $user;
     }
 }

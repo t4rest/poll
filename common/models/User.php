@@ -22,15 +22,28 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property string $created_at
  * @property string $updated_at
+ * @property string $authKey
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
 
     public static function tableName()
     {
         return '{{%user}}';
+    }
+
+    public function rules()
+    {
+        return [
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['email', 'email'],
+            ['username', 'unique'],
+            [['username', 'first_name', 'last_name'], 'string', 'max' => 100],
+            [['username', 'first_name', 'last_name', 'email'], 'safe', 'on' => ['update']],
+        ];
     }
 
     public function setTime()
@@ -42,13 +55,7 @@ class User extends ActiveRecord implements IdentityInterface
         $this->updated_at = $time;
     }
 
-    public function rules()
-    {
-        return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ];
-    }
+
 
     /**
      * @param int|string $id
