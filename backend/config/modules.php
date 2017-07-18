@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'main' => [
-        'class' => 'backend\modules\main\Module',
-    ],
+//    'main' => [
+//        'class' => 'backend\modules\main\Module',
+//    ],
 ];

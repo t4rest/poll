@@ -25,7 +25,6 @@ abstract class AuthController extends Controller
     {
         $token = Yii::$app->request->getQueryParam('oauth_token');
 
-
         if (!Yii::$app->user->loginByAccessToken($token)) {
             throw exceptions\AuthorizationException::invalidToken();
         }

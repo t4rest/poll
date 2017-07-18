@@ -3,7 +3,6 @@
 namespace backend\modules\user\api;
 
 use common\models\UploadAvatar;
-use backend\modules\user\datatypes\UserStructure;
 use yii;
 use common\models\User as UserModel;
 use yii\web\UploadedFile;
@@ -23,7 +22,7 @@ class Users
 
     }
 
-    public function myFolowers()
+    public function myFollowers()
     {
 
     }

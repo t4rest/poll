@@ -27,9 +27,10 @@ return [
         ['pattern' => 'api/user/photo', 'verb' => 'POST', 'route' => 'api/user/photo'],
 
 
-        ['pattern' => 'api/pool', 'verb' => 'GET',  'route' => 'api/user/index'],
-        ['pattern' => 'api/pool', 'verb' => 'POST', 'route' => 'api/user/update'],
-        ['pattern' => 'api/pool', 'verb' => 'PUT',  'route' => 'api/user/photo'],
+        ['pattern' => 'api/pool', 'verb' => 'GET',  'route' => 'api/pool/index'],
+        ['pattern' => 'api/pool', 'verb' => 'POST', 'route' => 'api/pool/create-pool'],
+        ['pattern' => 'api/pool', 'verb' => 'PUT',  'route' => 'api/pool/update-pool'],
+        ['pattern' => 'api/pool', 'verb' => 'DELETE',  'route' => 'api/pool/delete-pool'],
 
 
         /**

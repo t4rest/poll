@@ -3,7 +3,6 @@
 namespace backend\modules\user\api;
 
 use common\models\UploadAvatar;
-use backend\modules\user\datatypes\UserStructure;
 use yii;
 use common\models\User as UserModel;
 use yii\web\UploadedFile;
@@ -15,9 +14,9 @@ class User
      */
     public function info(): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $user = UserModel::findOne(Yii::$app->user->id);
 
-        return $userStructure->serialize();
+        return $user->toArray();
     }
 
     /**
@@ -33,9 +32,7 @@ class User
             p($user->errors);
         }
 
-        $userStructure = new UserStructure($user);
-
-        return $userStructure->serialize();
+        return $user->toArray();
     }
 
     /**
@@ -57,8 +54,6 @@ class User
         $user->photo_url = $model->imagePath;
         $user->save(false);
 
-        $userStructure = new UserStructure($user);
-
-        return $userStructure->serialize();
+        return $user->toArray();
     }
 }

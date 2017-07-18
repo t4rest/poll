@@ -83,7 +83,7 @@ class Pool extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPoolChoices()
+    public function getChoices()
     {
         return $this->hasMany(PoolChoice::className(), ['pool_id' => 'id']);
     }

@@ -2,22 +2,26 @@
 
 namespace backend\modules\pool\api;
 
-use common\models\UploadAvatar;
-use backend\modules\user\datatypes\UserStructure;
 use yii;
-use common\models\User as UserModel;
-use yii\web\UploadedFile;
+use common\models\PoolType;
+use common\models\Pool as PoolModel;
 
 class Pool
 {
     /**
+     * @param array $search
+     * @param array $filter
      * @return array
      */
-    public function getPools(): array
+    public function getPools(array $search = [], array $filter = []): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pools = PoolModel::find()
+            ->with('choices')
+            ->where(['user_id' => Yii::$app->user->id])
+            ->asArray()
+            ->all();
 
-        return $userStructure->serialize();
+        return $pools;
     }
 
     /**
@@ -25,9 +29,9 @@ class Pool
      */
     public function createPool(): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pool = new PoolModel();
 
-        return $userStructure->serialize();
+        return $pool->toArray();
     }
 
     /**
@@ -36,9 +40,9 @@ class Pool
      */
     public function getPool($id): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pool = new PoolModel();
 
-        return $userStructure->serialize();
+        return $pool->toArray();
     }
 
     /**
@@ -47,9 +51,9 @@ class Pool
      */
     public function updatePool($id): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pool = new PoolModel();
 
-        return $userStructure->serialize();
+        return $pool->toArray();
     }
 
     /**
@@ -58,9 +62,9 @@ class Pool
      */
     public function deletePool($id): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pool = new PoolModel();
 
-        return $userStructure->serialize();
+        return $pool->toArray();
     }
 
     /**
@@ -77,7 +81,7 @@ class Pool
      * @param $poolId
      * @return array
      */
-    public function addChoices($poolId)
+    public function addChoice($poolId)
     {
         $userStructure = new UserStructure(Yii::$app->user->getIdentity());
 
@@ -89,7 +93,7 @@ class Pool
      * @param $choiceId
      * @return array
      */
-    public function updateChoices($poolId, $choiceId)
+    public function updateChoice($poolId, $choiceId)
     {
         $userStructure = new UserStructure(Yii::$app->user->getIdentity());
 
@@ -101,7 +105,7 @@ class Pool
      * @param $choiceId
      * @return array
      */
-    public function deleteChoices($poolId, $choiceId)
+    public function deleteChoice($poolId, $choiceId)
     {
         $userStructure = new UserStructure(Yii::$app->user->getIdentity());
 
