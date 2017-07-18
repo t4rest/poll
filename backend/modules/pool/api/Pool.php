@@ -2,12 +2,16 @@
 
 namespace backend\modules\pool\api;
 
+use common\exceptions\DatabaseException;
+use common\models\UploadPoolPhoto;
 use yii;
-use common\models\PoolType;
 use common\models\Pool as PoolModel;
+use common\models\PoolChoice;
+use yii\web\UploadedFile;
 
 class Pool
 {
+
     /**
      * @param array $search
      * @param array $filter
@@ -26,10 +30,35 @@ class Pool
 
     /**
      * @return array
+     * @throws yii\base\Exception
      */
     public function createPool(): array
     {
-        $pool = new PoolModel();
+        $tr = PoolModel::getDb()->beginTransaction();
+
+        try {
+
+            $pool = new PoolModel();
+            $pool->setAttributes(Yii::$app->request->post());
+            $pool->user_id = Yii::$app->user->id;
+            $pool->setTime();
+
+            $model = new UploadPoolPhoto();
+            $model->image = UploadedFile::getInstanceByName('image');
+            if ($model->image && $model->upload($pool->id)) {
+                $pool->photo_url = $model->imagePath;
+            }
+
+            if (!$pool->save()) {
+                p($pool->errors);
+                throw DatabaseException::recordOperationFail();
+            }
+
+            $tr->commit();
+        } catch (yii\base\Exception $e) {
+            $tr->rollBack();
+            throw $e;
+        }
 
         return $pool->toArray();
     }
@@ -37,44 +66,67 @@ class Pool
     /**
      * @param $id
      * @return array
+     * @throws DatabaseException
      */
     public function getPool($id): array
     {
-        $pool = new PoolModel();
+        $pool = PoolModel::find()
+            ->with('choices')
+            ->where(['id' => $id])
+            ->asArray()
+            ->one();
 
-        return $pool->toArray();
+        return $pool;
     }
 
     /**
      * @param $id
      * @return array
+     * @throws DatabaseException
      */
     public function updatePool($id): array
     {
-        $pool = new PoolModel();
+        $pool = PoolModel::findOne($id);
+
+
+        $pool->setAttributes(Yii::$app->request->getBodyParams());
+
+        $model = new UploadPoolPhoto();
+        $model->image = UploadedFile::getInstanceByName('image');
+        if ($model->image && $model->upload(Yii::$app->user->id)) {
+            $pool->photo_url = $model->imagePath;
+        }
+
+        if (!$pool->save()) {
+            throw DatabaseException::recordOperationFail();
+        }
 
         return $pool->toArray();
     }
 
     /**
      * @param $id
-     * @return array
+     * @return bool
      */
-    public function deletePool($id): array
+    public function deletePool($id): bool
     {
-        $pool = new PoolModel();
+        $pool = PoolModel::findone($id);
 
-        return $pool->toArray();
+        return $pool->delete();
     }
 
     /**
      * @param $poolId
+     * @return array
      */
     public function getChoices($poolId)
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $poolChoices = PoolChoice::find()
+            ->where(['pool' => $poolId])
+            ->asArray()
+            ->all();
 
-        return $userStructure->serialize();
+        return $poolChoices;
     }
 
     /**
@@ -83,9 +135,12 @@ class Pool
      */
     public function addChoice($poolId)
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $poolChoice = PoolChoice::find()
+            ->where(['pool' => $poolId])
+            ->asArray()
+            ->one();
 
-        return $userStructure->serialize();
+        return $poolChoice;
     }
 
     /**
@@ -95,9 +150,15 @@ class Pool
      */
     public function updateChoice($poolId, $choiceId)
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $poolChoice = PoolChoice::find()
+            ->where([
+                'pool' => $poolId,
+                'id' => $choiceId,
+            ])
+            ->asArray()
+            ->one();
 
-        return $userStructure->serialize();
+        return $poolChoice;
     }
 
     /**
@@ -107,8 +168,14 @@ class Pool
      */
     public function deleteChoice($poolId, $choiceId)
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $poolChoice = PoolChoice::find()
+            ->where([
+                'pool' => $poolId,
+                'id' => $choiceId,
+            ])
+            ->asArray()
+            ->one();
 
-        return $userStructure->serialize();
+        return $poolChoice;
     }
 }

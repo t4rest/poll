@@ -2,24 +2,38 @@
 
 namespace backend\modules\pool\api;
 
-use common\models\UploadAvatar;
-use backend\modules\user\datatypes\UserStructure;
-use yii;
-use common\models\User as UserModel;
-use yii\web\UploadedFile;
+ use yii;
+use common\models\Pool as PoolModel;
+use common\models\PoolChoice;
+use common\models\PoolUserChoice;
 
 class Feed
 {
 
     public function myFeed(array $filter = [])
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $pools = PoolModel::find()
+            ->with('choices')
+            ->where(['user_id' => Yii::$app->user->id])
+            ->asArray()
+            ->all();
 
-        return $userStructure->serialize();
+        return $pools;
     }
 
-    public function userVotes($poolId)
+    /**
+     * @param $poolId
+     * @return array]
+     */
+    public function getPoolVotes($poolId): array
     {
+        $pools = PoolUserChoice::find()
+            ->with('choice')
+            ->with('user')
+            ->where(['id' => $poolId])
+            ->asArray()
+            ->all();
 
+        return $pools;
     }
 }

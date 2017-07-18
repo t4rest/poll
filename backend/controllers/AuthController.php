@@ -33,10 +33,10 @@ abstract class AuthController extends Controller
     }
 
     /**
-     * @param array $data
+     * @param array|bool $data
      * @return array
      */
-    public function responseSuccess( array $data): array
+    public function responseSuccess($data): array
     {
         return [
             'status' => 'success',

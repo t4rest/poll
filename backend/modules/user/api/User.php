@@ -25,34 +25,18 @@ class User
     public function update()
     {
         $user = UserModel::findOne(Yii::$app->user->id);
-
         $user->setAttributes(Yii::$app->request->post());
+        $user->setTime();
+
+        $model = new UploadAvatar();
+        $model->image = UploadedFile::getInstanceByName('image');
+        if ($model->image && $model->upload(Yii::$app->user->id)) {
+            $user->photo_url = $model->imagePath;
+        }
 
         if (!$user->save()) {
             p($user->errors);
         }
-
-        return $user->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function photo()
-    {
-        $model = new UploadAvatar();
-
-        if (Yii::$app->request->isPost) {
-            $model->image = UploadedFile::getInstanceByName('image');
-            if (!$model->upload()) {
-                p($model->errors);
-            }
-        }
-
-        $user = UserModel::findOne(Yii::$app->user->id);
-
-        $user->photo_url = $model->imagePath;
-        $user->save(false);
 
         return $user->toArray();
     }

@@ -24,13 +24,14 @@ return [
 
         ['pattern' => 'api/user', 'verb' => 'GET', 'route' => 'api/user/index'],
         ['pattern' => 'api/user', 'verb' => 'POST', 'route' => 'api/user/update'],
-        ['pattern' => 'api/user/photo', 'verb' => 'POST', 'route' => 'api/user/photo'],
 
 
-        ['pattern' => 'api/pool', 'verb' => 'GET',  'route' => 'api/pool/index'],
-        ['pattern' => 'api/pool', 'verb' => 'POST', 'route' => 'api/pool/create-pool'],
-        ['pattern' => 'api/pool', 'verb' => 'PUT',  'route' => 'api/pool/update-pool'],
-        ['pattern' => 'api/pool', 'verb' => 'DELETE',  'route' => 'api/pool/delete-pool'],
+        'GET api/pool' => 'api/pool/pools',
+        'POST api/pool' => 'api/pool/create-pool',
+
+        'GET api/pool/<pool_id:\d+>' => 'api/pool/pool',
+        'POST api/pool/<pool_id:\d+>' => 'api/pool/update-pool',
+        'DELETE api/pool/<pool_id:\d+>' => 'api/pool/delete-pool',
 
 
         /**

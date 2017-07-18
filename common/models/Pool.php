@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helper\Time;
 use Yii;
 
 /**
@@ -62,6 +63,15 @@ class Pool extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function setTime()
+    {
+        $time = Time::getCurrentTime();
+        if ($this->isNewRecord) {
+            $this->created_at = $time;
+        }
+        $this->updated_at = $time;
     }
 
     /**

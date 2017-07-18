@@ -20,10 +20,17 @@ class PoolController extends MainController
         return true;
     }
 
-    public function actionIndex(): array
+    public function actionPools(): array
     {
         return $this->responseSuccess(
             $this->api->getPools()
+        );
+    }
+
+    public function actionPool($pool_id): array
+    {
+        return $this->responseSuccess(
+            $this->api->getPool($pool_id)
         );
     }
 
@@ -34,19 +41,36 @@ class PoolController extends MainController
         );
     }
 
-    public function actionUpdatePool($id): array
+    public function actionUpdatePool($pool_id): array
     {
         return $this->responseSuccess(
-            $this->api->updatePool($id)
+            $this->api->updatePool($pool_id)
         );
     }
 
-    public function actionDeletePool($id): array
+    public function actionDeletePool($pool_id): array
     {
         return $this->responseSuccess(
-            $this->api->deletePool($id)
+            $this->api->deletePool($pool_id)
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function actionChoices($poolId): array
     {

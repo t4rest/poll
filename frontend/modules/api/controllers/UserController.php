@@ -40,14 +40,4 @@ class UserController extends MainController
         );
     }
 
-    /**
-     * @return array
-     */
-    public function actionPhoto(): array
-    {
-        return $this->responseSuccess(
-            $this->api->photo()
-        );
-    }
-
 }
