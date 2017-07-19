@@ -9,31 +9,51 @@ use yii\web\UploadedFile;
 class UploadPoolPhoto extends Model
 {
     /**
-     * @var UploadedFile
+     * @var UploadedFile[]
      */
-    public $image;
-    public $imagePath;
+    public $images;
+
+    /**
+     * @var array
+     */
+    public $imagesPath = [];
+    public $imagesRealPath = [];
 
     public function rules()
     {
         return [
-            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['images'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
     }
 
-    public function upload($poolId)
+    public function upload()
     {
-        $path = '/web/pool/' . md5('pool' . $poolId) . '.' . $this->image->extension;
-
-        $imagePath = Yii::getAlias('@frontend') . $path;
-        $this->imagePath = Url::base(true) . $path;
-
-
         if ($this->validate()) {
-            $this->image->saveAs($imagePath);
+
+            foreach ($this->images as $file) {
+                $path = '/web/pool/' . md5('pool' . $file->baseName . uniqid()) . '.' . $file->extension;
+
+                $imagePath = Yii::getAlias('@frontend') . $path;
+
+
+                $this->imagesRealPath[] = $imagePath;
+                $this->imagesPath[] = Url::base(true) . $path;
+
+                $file->saveAs($imagePath);
+            }
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     *
+     */
+    public function deleteImages()
+    {
+        foreach ($this->imagesRealPath as $file) {
+            if (file_exists($file)) unlink($file);
         }
     }
 }

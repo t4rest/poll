@@ -28,9 +28,7 @@ return [
 
         'GET api/pool' => 'api/pool/pools',
         'POST api/pool' => 'api/pool/create-pool',
-
         'GET api/pool/<pool_id:\d+>' => 'api/pool/pool',
-        'POST api/pool/<pool_id:\d+>' => 'api/pool/update-pool',
         'DELETE api/pool/<pool_id:\d+>' => 'api/pool/delete-pool',
 
 

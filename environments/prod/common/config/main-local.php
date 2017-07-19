@@ -19,6 +19,9 @@ return [
             'username' => $username,
             'password' => $password,
             'charset' => 'utf8',
+            'schemaMap' => [
+                'pgsql'=> 'tigrov\pgsql\Schema',
+            ],
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',

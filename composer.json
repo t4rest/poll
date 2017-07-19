@@ -14,7 +14,8 @@
         "yiisoft/yii2-swiftmailer": "*",
         "yiisoft/yii2-authclient": "~2.1.0",
 
-        "fxp/composer-asset-plugin": "*"
+        "fxp/composer-asset-plugin": "*",
+        "tigrov/yii2-pgsql": "dev-master"
     },
 
 

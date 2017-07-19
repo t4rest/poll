@@ -41,63 +41,10 @@ class PoolController extends MainController
         );
     }
 
-    public function actionUpdatePool($pool_id): array
-    {
-        return $this->responseSuccess(
-            $this->api->updatePool($pool_id)
-        );
-    }
-
     public function actionDeletePool($pool_id): array
     {
         return $this->responseSuccess(
             $this->api->deletePool($pool_id)
         );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function actionChoices($poolId): array
-    {
-        return $this->responseSuccess(
-            $this->api->getChoices($poolId)
-        );
-    }
-
-    public function actionAddChoice($poolId): array
-    {
-        return $this->responseSuccess(
-            $this->api->addChoice($poolId)
-        );
-    }
-
-    public function actionUpdateChoice($poolId, $choiceId): array
-    {
-        return $this->responseSuccess(
-            $this->api->updateChoice($poolId, $choiceId)
-        );
-    }
-
-    public function actionDeleteChoice($poolId, $choiceId): array
-    {
-        return $this->responseSuccess(
-            $this->api->deleteChoice($poolId, $choiceId)
-        );
-    }
-
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7962f2e3a8e400e653478a1174d90887",
+    "content-hash": "5f1e84739448269b8785e568e5d50d21",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -426,6 +426,54 @@
                 "mailer"
             ],
             "time": "2017-05-19 18:47:58"
+        },
+        {
+            "name": "tigrov/yii2-pgsql",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Tigrov/yii2-pgsql.git",
+                "reference": "f2f0bfed5b2ae4253a094a6c550121b4decb3c76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Tigrov/yii2-pgsql/zipball/f2f0bfed5b2ae4253a094a6c550121b4decb3c76",
+                "reference": "f2f0bfed5b2ae4253a094a6c550121b4decb3c76",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "tigrov\\pgsql\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Tigrov",
+                    "email": "rrr-r@ya.ru"
+                }
+            ],
+            "description": "Improved PostgreSQL schemas for Yii2",
+            "keywords": [
+                "array",
+                "bit",
+                "datetime",
+                "extension",
+                "json",
+                "pgsql",
+                "postgres",
+                "postgresql",
+                "timestamp",
+                "yii2"
+            ],
+            "time": "2017-07-16T18:45:18+00:00"
         },
         {
             "name": "yiisoft/yii2-authclient",
@@ -1106,7 +1154,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2017-07-07T15:11:58+00:00"
+            "time": "2017-07-07 15:11:58"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2713,7 +2761,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-06T07:45:45+00:00"
+            "time": "2017-07-06 07:45:45"
         },
         {
             "name": "symfony/console",
@@ -2892,7 +2940,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-06T13:37:40+00:00"
+            "time": "2017-07-06 13:37:40"
         },
         {
             "name": "symfony/dom-crawler",
@@ -3416,7 +3464,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "tigrov/yii2-pgsql": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

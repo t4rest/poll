@@ -12,7 +12,7 @@ use Yii;
  * @property int $user_id
  * @property int $type_id
  * @property int $is_hot
- * @property string $photo_url
+ * @property string $photos_url
  * @property string $data
  * @property string $created_at
  * @property string $updated_at
@@ -42,7 +42,8 @@ class Pool extends \yii\db\ActiveRecord
             [['user_id', 'type_id', 'is_hot'], 'default', 'value' => null],
             [['user_id', 'type_id', 'is_hot'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['photo_url', 'data'], 'string', 'max' => 255],
+            [['photos_url'], 'each', 'rule' => ['string']],
+            [['data'], 'string', 'max' => 255],
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PoolType::className(), 'targetAttribute' => ['type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -58,7 +59,7 @@ class Pool extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'type_id' => 'Type ID',
             'is_hot' => 'Is Hot',
-            'photo_url' => 'Photo Url',
+            'photos_url' => 'Photo Url',
             'data' => 'Data',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
