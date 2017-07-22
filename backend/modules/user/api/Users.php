@@ -2,38 +2,53 @@
 
 namespace backend\modules\user\api;
 
-use common\models\UploadAvatar;
-use yii;
 use common\models\User as UserModel;
-use yii\web\UploadedFile;
 
 class Users
 {
 
     public function userList(array $filter = []): array
     {
-        $userStructure = new UserStructure(Yii::$app->user->getIdentity());
+        $users = UserModel::find()
+            ->asArray()
+            ->all();
 
-        return $userStructure->serialize();
+        return $users;
     }
 
     public function iFollow()
     {
+        $users = UserModel::find()
+            ->asArray()
+            ->all();
 
+        return $users;
     }
 
     public function myFollowers()
     {
+        $users = UserModel::find()
+            ->asArray()
+            ->all();
 
+        return $users;
     }
 
     public function follow($userId)
     {
+        $users = UserModel::find()
+            ->asArray()
+            ->all();
 
+        return $users;
     }
 
     public function unfollow($userId)
     {
+        $users = UserModel::find()
+            ->asArray()
+            ->all();
 
+        return $users;
     }
 }

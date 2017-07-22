@@ -10,7 +10,7 @@ use common\models\PoolUserChoice;
 class Feed
 {
 
-    public function myFeed(array $filter = [])
+    public function feed(array $filter = [])
     {
         $pools = PoolModel::find()
             ->with('choices')
@@ -21,19 +21,19 @@ class Feed
         return $pools;
     }
 
-    /**
-     * @param $poolId
-     * @return array]
-     */
-    public function getPoolVotes($poolId): array
-    {
-        $pools = PoolUserChoice::find()
-            ->with('choice')
-            ->with('user')
-            ->where(['id' => $poolId])
-            ->asArray()
-            ->all();
-
-        return $pools;
-    }
+//    /**
+//     * @param $poolId
+//     * @return array]
+//     */
+//    public function getPoolVotes($poolId): array
+//    {
+//        $pools = PoolUserChoice::find()
+//            ->with('choice')
+//            ->with('user')
+//            ->where(['id' => $poolId])
+//            ->asArray()
+//            ->all();
+//
+//        return $pools;
+//    }
 }
