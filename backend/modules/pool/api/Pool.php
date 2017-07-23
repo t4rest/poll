@@ -39,7 +39,6 @@ class Pool
         $choicesPost = Yii::$app->request->post('choices', []);
 
 
-
         if (empty($poolPost) || empty($choicesPost)) {
             throw exceptions\RequestException::invalidRequest();
         }
@@ -112,12 +111,19 @@ class Pool
     /**
      * @param $id
      * @return bool
+     * @throws exceptions\RequestException
      */
     public function deletePool($id): bool
     {
         $pool = PoolModel::findone($id);
 
-        return $pool->delete();
+        if (!$pool) {
+            throw exceptions\RequestException::invalidRequest('Pool does not exists');
+        }
+
+        $pool->delete();
+
+        return true;
     }
 
 //    /**
