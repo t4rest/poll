@@ -3,22 +3,33 @@
 namespace backend\modules\user\api;
 
 use common\models\User as UserModel;
+use common\models\UserFriend;
+use Yii;
+use common\exceptions;
 
 class Users
 {
-
-    public function userList(array $filter = []): array
+    public function userList(): array
     {
+        $search = Yii::$app->request->get('search');
         $users = UserModel::find()
-            ->asArray()
-            ->all();
+            ->with('friends')
+            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
+            ->where(['status' => UserModel::STATUS_ACTIVE])
+            ->asArray();
 
-        return $users;
+        if (!empty($search)) {
+            $users->andWhere(['like', 'username', $search]);
+        }
+
+        return $users->all();
     }
 
     public function iFollow()
     {
-        $users = UserModel::find()
+        $users = UserFriend::find()
+            ->with('friend')
+            ->where(['user_id' => Yii::$app->user->id])
             ->asArray()
             ->all();
 
@@ -27,7 +38,9 @@ class Users
 
     public function myFollowers()
     {
-        $users = UserModel::find()
+        $users = UserFriend::find()
+            ->with('user')
+            ->where(['friend_id' => Yii::$app->user->id])
             ->asArray()
             ->all();
 
@@ -36,19 +49,43 @@ class Users
 
     public function follow($userId)
     {
-        $users = UserModel::find()
+        $friend = UserFriend::find()
+            ->where(['friend_id' => $userId, 'user_id' => Yii::$app->user->id])
             ->asArray()
-            ->all();
+            ->one();
 
-        return $users;
+        if ($friend) {
+            return $friend;
+        }
+
+        $user = UserModel::find()
+            ->where(['id' => $userId])
+            ->asArray()
+            ->one();
+
+        if (!$user) {
+            throw exceptions\RequestException::invalidRequest('User does not exists');
+        }
+
+        $friend = new UserFriend();
+        $friend->user_id = Yii::$app->user->id;
+        $friend->friend_id = $userId;
+        $friend->setTime();
+        $friend->save();
+
+        return $friend->toArray();
     }
 
     public function unfollow($userId)
     {
-        $users = UserModel::find()
-            ->asArray()
-            ->all();
+        $friend = UserFriend::find()
+            ->where(['friend_id' => $userId, 'user_id' => Yii::$app->user->id])
+            ->one();
 
-        return $users;
+        if ($friend) {
+            $friend->delete();
+        }
+
+        return true;
     }
 }

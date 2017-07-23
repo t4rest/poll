@@ -30,13 +30,16 @@ class UploadPoolPhoto extends Model
     {
         if ($this->validate()) {
 
+            $i = 1;
             foreach ($this->images as $file) {
                 $path = '/web/pool/' . md5('pool' . $file->baseName . uniqid()) . '.' . $file->extension;
 
                 $imagePath = Yii::getAlias('@frontend') . $path;
 
 
-                $this->imagesRealPath[] = $imagePath;
+                $this->imagesRealPath[$i] = $imagePath;
+                $i++;
+
                 $this->imagesPath[] = Url::base(true) . $path;
 
                 $file->saveAs($imagePath);

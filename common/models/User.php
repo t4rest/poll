@@ -17,8 +17,9 @@ use yii\web\IdentityInterface;
  * @property string $last_name
  * @property string $email
  * @property string $photo_url
- * @property string $timezone
- * @property string $locale
+ * @property integer $country
+ * @property integer $timezone
+ * @property integer $locale
  * @property integer $status
  * @property string $created_at
  * @property string $updated_at
@@ -40,9 +41,10 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
             ['email', 'email'],
+            [['country', 'timezone', 'locale'], 'integer'],
             ['username', 'unique'],
             [['username', 'first_name', 'last_name'], 'string', 'max' => 100],
-            [['username', 'first_name', 'last_name', 'email'], 'safe', 'on' => ['update']],
+            [['username', 'first_name', 'last_name', 'email', 'country', 'timezone', 'locale'], 'safe', 'on' => ['update']],
         ];
     }
 
@@ -118,5 +120,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function getFriends()
+    {
+        return $this->hasOne(UserFriend::className(), ['friend_id' => 'id']);
     }
 }

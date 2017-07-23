@@ -14,8 +14,11 @@ class m130524_201442_init extends Migration
             'last_name' => $this->string(),
             'email' => $this->string(),
             'photo_url' => $this->string(),
-            'timezone' => $this->smallInteger(2)->unsigned(),
-            'locale' => $this->smallInteger(2)->unsigned(),
+
+            'country' => $this->smallInteger(3)->defaultValue(0)->unsigned(),
+            'timezone' => $this->smallInteger(2)->defaultValue(0)->unsigned(),
+            'locale' => $this->smallInteger(2)->defaultValue(0)->unsigned(),
+
             'status' => $this->smallInteger(2)->notNull()->defaultValue(0)->unsigned(),
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->notNull(),

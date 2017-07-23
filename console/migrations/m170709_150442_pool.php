@@ -24,7 +24,7 @@ class m170709_150442_pool extends Migration
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->notNull(),
         ]);
-        $this->execute('ALTER TABLE pool ADD COLUMN photos_url "varchar"(255)[]');
+        $this->execute('ALTER TABLE pool ADD COLUMN photos_url "jsonb"');
 
         $this->addForeignKey('fk-pool-user_id-user-id', 'pool', 'user_id', 'user', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk-pool_type-type_id-type-id', 'pool', 'type_id', 'pool_type', 'id', 'CASCADE', 'CASCADE');

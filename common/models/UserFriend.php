@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helper\Time;
 use Yii;
 
 /**
@@ -38,6 +39,13 @@ class UserFriend extends \yii\db\ActiveRecord
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['friend_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['friend_id' => 'id']],
         ];
+    }
+
+    public function setTime()
+    {
+        if ($this->isNewRecord) {
+            $this->date = Time::getCurrentTime();
+        }
     }
 
     /**
