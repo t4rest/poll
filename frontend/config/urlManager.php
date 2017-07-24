@@ -43,6 +43,8 @@ return [
         'DELETE api/users/follow/<user_id:\d+>' => 'api/users/unfollow',
 
 
+        'POST api/pool/<pool_id:\d+>/choice/<choice_id:\d+>' => 'api/feed/vote',
+
         /**
          * base url rules
          */

@@ -27,4 +27,11 @@ class FeedController extends MainController
         );
     }
 
+    public function actionVote($pool_id, $choice_id): array
+    {
+        return $this->responseSuccess(
+            $this->api->vote($pool_id, $choice_id)
+        );
+    }
+
 }
