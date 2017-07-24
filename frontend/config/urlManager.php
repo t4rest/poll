@@ -21,7 +21,11 @@ return [
          */
         'site/<_a:[\w\-]+>' => 'main/site/<_a>',
 
+
         'GET api/country' => 'api/country/index',
+
+
+        'GET api/feed' => 'api/feed/feed',
 
 
         'GET api/user' => 'api/user/index',

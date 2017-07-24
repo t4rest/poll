@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helper\Time;
 use Yii;
 
 /**
@@ -54,6 +55,13 @@ class PoolUserChoice extends \yii\db\ActiveRecord
             'choice_id' => 'Choice ID',
             'date' => 'Date',
         ];
+    }
+
+    public function setTime()
+    {
+        if ($this->isNewRecord) {
+            $this->date = Time::getCurrentTime();
+        }
     }
 
     /**

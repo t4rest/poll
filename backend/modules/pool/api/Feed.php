@@ -2,11 +2,13 @@
 
 namespace backend\modules\pool\api;
 
+use common\models\UserFriend;
 use yii;
 use common\models\Pool as PoolModel;
 use common\models\PoolChoice;
 use common\models\PoolUserChoice;
 use common\exceptions;
+
 class Feed
 {
     /**
@@ -15,9 +17,15 @@ class Feed
      */
     public function feed(array $filter = [])
     {
+        $subQuery = UserFriend::find()
+            ->select('friend_id')
+            ->where(['user_id' => Yii::$app->user->id]);
+
         $pools = PoolModel::find()
-            ->with('choices')
-            ->where(['user_id' => Yii::$app->user->id])
+            ->with(['choices', 'user', 'poolUserChoice' => function ($queryVote) {
+                $queryVote->where(['user_id' => Yii::$app->user->id]);
+            }])
+            ->where(['user_id' => $subQuery])
             ->asArray()
             ->all();
 
@@ -52,7 +60,7 @@ class Feed
             ->where(['pool_id' => $poolId, 'user_id' => Yii::$app->user->id])
             ->one();
 
-        if(!empty($userChoice)) {
+        if (!empty($userChoice)) {
             return true;
         }
 
@@ -60,7 +68,11 @@ class Feed
         $userChoice->user_id = Yii::$app->user->id;
         $userChoice->pool_id = $poolId;
         $userChoice->choice_id = $choiceId;
-        $userChoice->save();
+        $userChoice->setTime();
+
+        if (!$userChoice->save()) {
+            p($userChoice->errors);
+        }
 
         return true;
     }
