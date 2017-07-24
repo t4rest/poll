@@ -27,9 +27,15 @@ class Users
 
     public function iFollow()
     {
-        $users = UserFriend::find()
-            ->with('friend')
+        $friendsIds = UserFriend::find()
+            ->select(['friend_id'])
             ->where(['user_id' => Yii::$app->user->id])
+            ->asArray()
+            ->indexBy('friend_id')
+            ->all();
+
+        $users = UserModel::find()
+            ->where(['id' => array_keys($friendsIds)])
             ->asArray()
             ->all();
 
@@ -38,9 +44,16 @@ class Users
 
     public function myFollowers()
     {
-        $users = UserFriend::find()
-            ->with('user')
+        $friendsIds = UserFriend::find()
+            ->select(['user_id'])
             ->where(['friend_id' => Yii::$app->user->id])
+            ->indexBy('user_id')
+            ->asArray()
+            ->all();
+
+        $users = UserModel::find()
+            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
+            ->where(['id' => array_keys($friendsIds)])
             ->asArray()
             ->all();
 
@@ -59,6 +72,7 @@ class Users
         }
 
         $user = UserModel::find()
+            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
             ->where(['id' => $userId])
             ->asArray()
             ->one();
