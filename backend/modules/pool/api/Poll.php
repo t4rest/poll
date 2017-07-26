@@ -1,15 +1,15 @@
 <?php
 
-namespace backend\modules\pool\api;
+namespace backend\modules\poll\api;
 
 use common\exceptions;
-use common\models\UploadPoolPhoto;
+use common\models\UploadPollPhoto;
 use yii;
-use common\models\Pool as PoolModel;
-use common\models\PoolChoice;
+use common\models\Poll as PollModel;
+use common\models\PollChoice;
 use yii\web\UploadedFile;
 
-class Pool
+class Poll
 {
 
     /**
@@ -17,40 +17,40 @@ class Pool
      * @param array $filter
      * @return array
      */
-    public function getPools(array $search = [], array $filter = []): array
+    public function getPolls(array $search = [], array $filter = []): array
     {
-        $pools = PoolModel::find()
+        $polls = PollModel::find()
             ->with('choices')
             ->where(['user_id' => Yii::$app->user->id])
             ->asArray()
             ->all();
 
-        return $pools;
+        return $polls;
     }
 
     /**
      * @return array
      * @throws yii\base\Exception
      */
-    public function createPool(): array
+    public function createPoll(): array
     {
-        $tr = PoolModel::getDb()->beginTransaction();
-        $poolPost = Yii::$app->request->post('pool', []);
+        $tr = PollModel::getDb()->beginTransaction();
+        $pollPost = Yii::$app->request->post('poll', []);
         $choicesPost = Yii::$app->request->post('choices', []);
 
 
-        if (empty($poolPost) || empty($choicesPost)) {
+        if (empty($pollPost) || empty($choicesPost)) {
             throw exceptions\RequestException::invalidRequest();
         }
 
         try {
 
-            $pool = new PoolModel();
-            $pool->setAttributes($poolPost);
-            $pool->user_id = Yii::$app->user->id;
-            $pool->setTime();
+            $poll = new PollModel();
+            $poll->setAttributes($pollPost);
+            $poll->user_id = Yii::$app->user->id;
+            $poll->setTime();
 
-            $images = new UploadPoolPhoto();
+            $images = new UploadPollPhoto();
             $images->images = UploadedFile::getInstancesByName('images');
 
             if ($images->images && !$images->validate()) {
@@ -58,25 +58,25 @@ class Pool
             }
 
             if ($images->images && $images->upload()) {
-                $pool->photos_url = $images->imagesPath;
+                $poll->photos_url = $images->imagesPath;
             }
 
-            if (!$pool->save()) {
+            if (!$poll->save()) {
                 $images->deleteImages();
 
-                p($pool->errors);
+                p($poll->errors);
                 throw exceptions\DatabaseException::recordOperationFail();
             }
 
             foreach ($choicesPost as $item) {
-                $choice = new PoolChoice();
+                $choice = new PollChoice();
                 $choice->data = $item;
-                $choice->pool_id = $pool->id;
+                $choice->poll_id = $poll->id;
                 $choice->count = 0;
                 if (!$choice->save()) {
                     $images->deleteImages();
 
-                    p($pool->errors);
+                    p($poll->errors);
                     throw exceptions\DatabaseException::recordOperationFail();
                 }
             }
@@ -88,7 +88,7 @@ class Pool
             throw $e;
         }
 
-        return $pool->toArray();
+        return $poll->toArray();
     }
 
     /**
@@ -96,15 +96,15 @@ class Pool
      * @return array
      * @throws exceptions\DatabaseException
      */
-    public function getPool($id): array
+    public function getPoll($id): array
     {
-        $pool = PoolModel::find()
+        $poll = PollModel::find()
             ->with('choices')
             ->where(['id' => $id])
             ->asArray()
             ->one();
 
-        return $pool;
+        return $poll;
     }
 
 
@@ -113,15 +113,15 @@ class Pool
      * @return bool
      * @throws exceptions\RequestException
      */
-    public function deletePool($id): bool
+    public function deletePoll($id): bool
     {
-        $pool = PoolModel::findone($id);
+        $poll = PollModel::findone($id);
 
-        if (!$pool) {
-            throw exceptions\RequestException::invalidRequest('Pool does not exists');
+        if (!$poll) {
+            throw exceptions\RequestException::invalidRequest('Poll does not exists');
         }
 
-        $pool->delete();
+        $poll->delete();
 
         return true;
     }
@@ -131,87 +131,87 @@ class Pool
 //     * @return array
 //     * @throws exceptions\DatabaseException
 //     */
-//    public function updatePool($id): array
+//    public function updatePoll($id): array
 //    {
-//        $pool = PoolModel::findOne($id);
+//        $poll = PollModel::findOne($id);
 //
 //
-//        $pool->setAttributes(Yii::$app->request->getBodyParams());
+//        $poll->setAttributes(Yii::$app->request->getBodyParams());
 //
-//        $model = new UploadPoolPhoto();
+//        $model = new UploadPollPhoto();
 //        $model->image = UploadedFile::getInstanceByName('image');
 //        if ($model->image && $model->upload(Yii::$app->user->id)) {
-//            $pool->photo_url = $model->imagePath;
+//            $poll->photo_url = $model->imagePath;
 //        }
 //
-//        if (!$pool->save()) {
+//        if (!$poll->save()) {
 //            throw exceptions\DatabaseException::recordOperationFail();
 //        }
 //
-//        return $pool->toArray();
+//        return $poll->toArray();
 //    }
 //
 //    /**
-//     * @param $poolId
+//     * @param $pollId
 //     * @return array
 //     */
-//    public function getChoices($poolId)
+//    public function getChoices($pollId)
 //    {
-//        $poolChoices = PoolChoice::find()
-//            ->where(['pool' => $poolId])
+//        $pollChoices = PollChoice::find()
+//            ->where(['poll' => $pollId])
 //            ->asArray()
 //            ->all();
 //
-//        return $poolChoices;
+//        return $pollChoices;
 //    }
 //
 //    /**
-//     * @param $poolId
+//     * @param $pollId
 //     * @return array
 //     */
-//    public function addChoice($poolId)
+//    public function addChoice($pollId)
 //    {
-//        $poolChoice = PoolChoice::find()
-//            ->where(['pool' => $poolId])
+//        $pollChoice = PollChoice::find()
+//            ->where(['poll' => $pollId])
 //            ->asArray()
 //            ->one();
 //
-//        return $poolChoice;
+//        return $pollChoice;
 //    }
 //
 //    /**
-//     * @param $poolId
+//     * @param $pollId
 //     * @param $choiceId
 //     * @return array
 //     */
-//    public function updateChoice($poolId, $choiceId)
+//    public function updateChoice($pollId, $choiceId)
 //    {
-//        $poolChoice = PoolChoice::find()
+//        $pollChoice = PollChoice::find()
 //            ->where([
-//                'pool' => $poolId,
+//                'poll' => $pollId,
 //                'id' => $choiceId,
 //            ])
 //            ->asArray()
 //            ->one();
 //
-//        return $poolChoice;
+//        return $pollChoice;
 //    }
 //
 //    /**
-//     * @param $poolId
+//     * @param $pollId
 //     * @param $choiceId
 //     * @return array
 //     */
-//    public function deleteChoice($poolId, $choiceId)
+//    public function deleteChoice($pollId, $choiceId)
 //    {
-//        $poolChoice = PoolChoice::find()
+//        $pollChoice = PollChoice::find()
 //            ->where([
-//                'pool' => $poolId,
+//                'poll' => $pollId,
 //                'id' => $choiceId,
 //            ])
 //            ->asArray()
 //            ->one();
 //
-//        return $poolChoice;
+//        return $pollChoice;
 //    }
 }

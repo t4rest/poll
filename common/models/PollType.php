@@ -5,15 +5,15 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%pool_type}}".
+ * This is the model class for table "{{%poll_type}}".
  *
  * @property int $id
  * @property string $alias
  * @property string $title
  *
- * @property Pool[] $pools
+ * @property Poll[] $polls
  */
-class PoolType extends \yii\db\ActiveRecord
+class PollType extends \yii\db\ActiveRecord
 {
     const POOL_TYPE_TEXT = 1;
     const POOL_TYPE_SINGL_PHOTO = 2;
@@ -24,7 +24,7 @@ class PoolType extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%pool_type}}';
+        return '{{%poll_type}}';
     }
 
     /**
@@ -57,9 +57,9 @@ class PoolType extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPools()
+    public function getPolls()
     {
-        return $this->hasMany(Pool::className(), ['type_id' => 'id']);
+        return $this->hasMany(Poll::className(), ['type_id' => 'id']);
     }
 
     public static function getTypes()

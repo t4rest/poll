@@ -6,7 +6,7 @@ use common\helper\Time;
 use Yii;
 
 /**
- * This is the model class for table "{{%pool}}".
+ * This is the model class for table "{{%poll}}".
  *
  * @property int $id
  * @property int $user_id
@@ -17,19 +17,19 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property PoolType $type
+ * @property PollType $type
  * @property User $user
- * @property PoolChoice[] $poolChoices
- * @property PoolUserChoice[] $poolUserChoices
+ * @property PollChoice[] $pollChoices
+ * @property PollUserChoice[] $pollUserChoices
  */
-class Pool extends \yii\db\ActiveRecord
+class Poll extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%pool}}';
+        return '{{%poll}}';
     }
 
     /**
@@ -44,7 +44,7 @@ class Pool extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['photos_url'], 'each', 'rule' => ['string']],
             [['data'], 'string', 'max' => 255],
-            [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PoolType::className(), 'targetAttribute' => ['type_id' => 'id']],
+            [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollType::className(), 'targetAttribute' => ['type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -80,7 +80,7 @@ class Pool extends \yii\db\ActiveRecord
      */
     public function getType()
     {
-        return $this->hasOne(PoolType::className(), ['id' => 'type_id']);
+        return $this->hasOne(PollType::className(), ['id' => 'type_id']);
     }
 
     /**
@@ -96,22 +96,22 @@ class Pool extends \yii\db\ActiveRecord
      */
     public function getChoices()
     {
-        return $this->hasMany(PoolChoice::className(), ['pool_id' => 'id']);
+        return $this->hasMany(PollChoice::className(), ['poll_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPoolUserChoices()
+    public function getPollUserChoices()
     {
-        return $this->hasMany(PoolUserChoice::className(), ['pool_id' => 'id']);
+        return $this->hasMany(PollUserChoice::className(), ['poll_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPoolUserChoice()
+    public function getPollUserChoice()
     {
-        return $this->hasOne(PoolUserChoice::className(), ['pool_id' => 'id']);
+        return $this->hasOne(PollUserChoice::className(), ['poll_id' => 'id']);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\modules\pool\api;
+namespace backend\modules\poll\api;
 
 use common\models\UserFriend;
 use yii;
-use common\models\Pool as PoolModel;
-use common\models\PoolChoice;
-use common\models\PoolUserChoice;
+use common\models\Poll as PollModel;
+use common\models\PollChoice;
+use common\models\PollUserChoice;
 use common\exceptions;
 
 class Feed
@@ -21,52 +21,52 @@ class Feed
             ->select('friend_id')
             ->where(['user_id' => Yii::$app->user->id]);
 
-        $pools = PoolModel::find()
-            ->with(['choices', 'user', 'poolUserChoice' => function ($queryVote) {
+        $polls = PollModel::find()
+            ->with(['choices', 'user', 'pollUserChoice' => function ($queryVote) {
                 $queryVote->where(['user_id' => Yii::$app->user->id]);
             }])
             ->where(['user_id' => $subQuery])
             ->asArray()
             ->all();
 
-        return $pools;
+        return $polls;
     }
 
     /**
-     * @param $poolId
+     * @param $pollId
      * @param $choiceId
      * @return bool
      * @throws exceptions\RequestException
      */
-    public function vote($poolId, $choiceId)
+    public function vote($pollId, $choiceId)
     {
         // todo: transactions
-        $pool = PoolModel::find()
-            ->where(['id' => $poolId])
+        $poll = PollModel::find()
+            ->where(['id' => $pollId])
             ->one();
 
-        $choice = PoolChoice::find()
+        $choice = PollChoice::find()
             ->where(['id' => $choiceId])
             ->one();
 
-        if (empty($pool) || empty($choice)) {
+        if (empty($poll) || empty($choice)) {
             throw exceptions\RequestException::invalidRequest();
         }
 
         $choice->count += 1;
         $choice->save();
 
-        $userChoice = PoolUserChoice::find()
-            ->where(['pool_id' => $poolId, 'user_id' => Yii::$app->user->id])
+        $userChoice = PollUserChoice::find()
+            ->where(['poll_id' => $pollId, 'user_id' => Yii::$app->user->id])
             ->one();
 
         if (!empty($userChoice)) {
             return true;
         }
 
-        $userChoice = new PoolUserChoice();
+        $userChoice = new PollUserChoice();
         $userChoice->user_id = Yii::$app->user->id;
-        $userChoice->pool_id = $poolId;
+        $userChoice->poll_id = $pollId;
         $userChoice->choice_id = $choiceId;
         $userChoice->setTime();
 
@@ -78,18 +78,18 @@ class Feed
     }
 
 //    /**
-//     * @param $poolId
+//     * @param $pollId
 //     * @return array]
 //     */
-//    public function getPoolVotes($poolId): array
+//    public function getPollVotes($pollId): array
 //    {
-//        $pools = PoolUserChoice::find()
+//        $polls = PollUserChoice::find()
 //            ->with('choice')
 //            ->with('user')
-//            ->where(['id' => $poolId])
+//            ->where(['id' => $pollId])
 //            ->asArray()
 //            ->all();
 //
-//        return $pools;
+//        return $polls;
 //    }
 }

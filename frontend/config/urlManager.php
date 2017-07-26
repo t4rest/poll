@@ -32,10 +32,10 @@ return [
         'POST api/user' => 'api/user/update',
 
 
-        'GET api/pool' => 'api/pool/pools',
-        'POST api/pool' => 'api/pool/create-pool',
-        'GET api/pool/<pool_id:\d+>' => 'api/pool/pool',
-        'DELETE api/pool/<pool_id:\d+>' => 'api/pool/delete-pool',
+        'GET api/poll' => 'api/poll/polls',
+        'POST api/poll' => 'api/poll/create-poll',
+        'GET api/poll/<poll_id:\d+>' => 'api/poll/poll',
+        'DELETE api/poll/<poll_id:\d+>' => 'api/poll/delete-poll',
 
 
         'GET api/users' => 'api/users/index',
@@ -47,7 +47,7 @@ return [
         'DELETE api/users/follow/<user_id:\d+>' => 'api/users/unfollow',
 
 
-        'POST api/pool/<pool_id:\d+>/choice/<choice_id:\d+>' => 'api/feed/vote',
+        'POST api/poll/<poll_id:\d+>/choice/<choice_id:\d+>' => 'api/feed/vote',
 
         /**
          * base url rules

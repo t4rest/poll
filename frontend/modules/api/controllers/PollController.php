@@ -2,49 +2,49 @@
 
 namespace frontend\modules\api\controllers;
 
-use backend\modules\pool\api\Pool;
+use backend\modules\poll\api\Poll;
 use frontend\modules\api\components\MainController;
 
-class PoolController extends MainController
+class PollController extends MainController
 {
     /**
-     * @var Pool
+     * @var Poll
      */
     public $api;
 
     public function beforeAction($action)
     {
         if (parent::beforeAction($action)) {
-            $this->api = new Pool();
+            $this->api = new Poll();
         }
         return true;
     }
 
-    public function actionPools(): array
+    public function actionPolls(): array
     {
         return $this->responseSuccess(
-            $this->api->getPools()
+            $this->api->getPolls()
         );
     }
 
-    public function actionPool($pool_id): array
+    public function actionPoll($poll_id): array
     {
         return $this->responseSuccess(
-            $this->api->getPool($pool_id)
+            $this->api->getPoll($poll_id)
         );
     }
 
-    public function actionCreatePool(): array
+    public function actionCreatePoll(): array
     {
         return $this->responseSuccess(
-            $this->api->createPool()
+            $this->api->createPoll()
         );
     }
 
-    public function actionDeletePool($pool_id): array
+    public function actionDeletePoll($poll_id): array
     {
         return $this->responseSuccess(
-            $this->api->deletePool($pool_id)
+            $this->api->deletePoll($poll_id)
         );
     }
 }

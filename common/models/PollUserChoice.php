@@ -6,25 +6,25 @@ use common\helper\Time;
 use Yii;
 
 /**
- * This is the model class for table "{{%pool_user_choice}}".
+ * This is the model class for table "{{%poll_user_choice}}".
  *
- * @property int $pool_id
+ * @property int $poll_id
  * @property int $user_id
  * @property int $choice_id
  * @property string $date
  *
- * @property Pool $pool
- * @property PoolChoice $choice
+ * @property Poll $poll
+ * @property PollChoice $choice
  * @property User $user
  */
-class PoolUserChoice extends \yii\db\ActiveRecord
+class PollUserChoice extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%pool_user_choice}}';
+        return '{{%poll_user_choice}}';
     }
 
     /**
@@ -33,13 +33,13 @@ class PoolUserChoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pool_id', 'user_id', 'choice_id', 'date'], 'required'],
-            [['pool_id', 'user_id', 'choice_id'], 'default', 'value' => null],
-            [['pool_id', 'user_id', 'choice_id'], 'integer'],
+            [['poll_id', 'user_id', 'choice_id', 'date'], 'required'],
+            [['poll_id', 'user_id', 'choice_id'], 'default', 'value' => null],
+            [['poll_id', 'user_id', 'choice_id'], 'integer'],
             [['date'], 'safe'],
-            [['pool_id', 'user_id', 'choice_id'], 'unique', 'targetAttribute' => ['pool_id', 'user_id', 'choice_id']],
-            [['pool_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pool::className(), 'targetAttribute' => ['pool_id' => 'id']],
-            [['choice_id'], 'exist', 'skipOnError' => true, 'targetClass' => PoolChoice::className(), 'targetAttribute' => ['choice_id' => 'id']],
+            [['poll_id', 'user_id', 'choice_id'], 'unique', 'targetAttribute' => ['poll_id', 'user_id', 'choice_id']],
+            [['poll_id'], 'exist', 'skipOnError' => true, 'targetClass' => Poll::className(), 'targetAttribute' => ['poll_id' => 'id']],
+            [['choice_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollChoice::className(), 'targetAttribute' => ['choice_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -50,7 +50,7 @@ class PoolUserChoice extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'pool_id' => 'Pool ID',
+            'poll_id' => 'Poll ID',
             'user_id' => 'User ID',
             'choice_id' => 'Choice ID',
             'date' => 'Date',
@@ -67,9 +67,9 @@ class PoolUserChoice extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPool()
+    public function getPoll()
     {
-        return $this->hasOne(Pool::className(), ['id' => 'pool_id']);
+        return $this->hasOne(Poll::className(), ['id' => 'poll_id']);
     }
 
     /**
@@ -77,7 +77,7 @@ class PoolUserChoice extends \yii\db\ActiveRecord
      */
     public function getChoice()
     {
-        return $this->hasOne(PoolChoice::className(), ['id' => 'choice_id']);
+        return $this->hasOne(PollChoice::className(), ['id' => 'choice_id']);
     }
 
     /**

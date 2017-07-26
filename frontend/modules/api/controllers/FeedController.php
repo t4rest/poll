@@ -2,7 +2,7 @@
 
 namespace frontend\modules\api\controllers;
 
- use backend\modules\pool\api\Feed;
+ use backend\modules\poll\api\Feed;
  use frontend\modules\api\components\MainController;
 
 class FeedController extends MainController
@@ -27,10 +27,10 @@ class FeedController extends MainController
         );
     }
 
-    public function actionVote($pool_id, $choice_id): array
+    public function actionVote($poll_id, $choice_id): array
     {
         return $this->responseSuccess(
-            $this->api->vote($pool_id, $choice_id)
+            $this->api->vote($poll_id, $choice_id)
         );
     }
 

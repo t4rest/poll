@@ -6,7 +6,7 @@ use yii\base\Model;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 
-class UploadPoolPhoto extends Model
+class UploadPollPhoto extends Model
 {
     /**
      * @var UploadedFile[]
@@ -32,7 +32,7 @@ class UploadPoolPhoto extends Model
 
             $i = 1;
             foreach ($this->images as $file) {
-                $path = '/web/pool/' . md5('pool' . $file->baseName . uniqid()) . '.' . $file->extension;
+                $path = '/web/poll/' . md5('poll' . $file->baseName . uniqid()) . '.' . $file->extension;
 
                 $imagePath = Yii::getAlias('@frontend') . $path;
 
