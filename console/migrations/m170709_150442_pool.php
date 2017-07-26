@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m170709_150442_pool extends Migration
+class m170709_150442_poll extends Migration
 {
     public function safeUp()
     {
@@ -57,9 +57,9 @@ class m170709_150442_pool extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('pool_user_choice');
-        $this->dropTable('pool_choice');
-        $this->dropTable('pool');
-        $this->dropTable('pool_type');
+        $this->dropTable('poll_user_choice');
+        $this->dropTable('poll_choice');
+        $this->dropTable('poll');
+        $this->dropTable('poll_type');
     }
 }
