@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m170709_150442_pool extends Migration
+class m170709_150442_poll extends Migration
 {
     public function safeUp()
     {
