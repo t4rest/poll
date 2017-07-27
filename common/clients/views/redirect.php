@@ -29,7 +29,7 @@ use yii\helpers\Json;
 </head>
 <body>
 
-<div id="token" data-token='<?php echo Json::htmlEncode($token); ?>' data-error='<?php echo Json::htmlEncode($error); ?>'></div>
+<div id="token" data-token="<?php echo Json::htmlEncode($token); ?>" data-error="<?php echo Json::htmlEncode($error); ?>"></div>
 
 
 </body>
