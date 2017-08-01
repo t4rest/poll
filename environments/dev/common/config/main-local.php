@@ -49,6 +49,17 @@ return [
                 ],
             ],
         ],
+        //http://edvice.s3-website.eu-central-1.amazonaws.com
+        's3' => [
+            'class' => 'frostealth\yii2\aws\s3\Service',
+            'credentials' => [ // Aws\Credentials\CredentialsInterface|array|callable
+                'key' => 'AKIAIJ3VM7M3G4OHDR5A',
+                'secret' => '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',
+            ],
+            'region' => 'eu-central-1',
+            'defaultBucket' => 'edvicetest',
+            'defaultAcl' => 'public-read',
+        ],
     ],
 ];
 

@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%poll_type}}".
@@ -13,11 +13,11 @@ use Yii;
  *
  * @property Poll[] $polls
  */
-class PollType extends \yii\db\ActiveRecord
+class PollType extends ActiveRecord
 {
-    const POOL_TYPE_TEXT = 1;
-    const POOL_TYPE_SINGL_PHOTO = 2;
-    const POOL_TYPE_PHOTO_COMPARISON = 3;
+    const POLL_TYPE_TEXT = 1;
+    const POLL_TYPE_SINGLE_PHOTO = 2;
+    const POLL_TYPE_PHOTO_COMPARISON = 3;
 
     /**
      * @inheritdoc
@@ -64,12 +64,9 @@ class PollType extends \yii\db\ActiveRecord
 
     public static function getTypes()
     {
-        $types = [];
-
-        foreach (self::find()->all() as $item) {
-            $types[$item->id] = $item->title;
-        }
-
-        return $types;
+        return self::find()
+            ->asArray()
+            ->indexBy('id')
+            ->all();
     }
 }

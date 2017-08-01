@@ -3,7 +3,7 @@
 namespace common\models;
 
 use common\helper\Time;
-use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%poll}}".
@@ -12,6 +12,8 @@ use Yii;
  * @property int $user_id
  * @property int $type_id
  * @property int $is_hot
+ * @property string $photo_storage
+ * @property string $photo_url
  * @property string $photos_url
  * @property string $data
  * @property string $created_at
@@ -20,9 +22,11 @@ use Yii;
  * @property PollType $type
  * @property User $user
  * @property PollChoice[] $pollChoices
+ * @property \yii\db\ActiveQuery $pollUserChoice
+ * @property \yii\db\ActiveQuery $choices
  * @property PollUserChoice[] $pollUserChoices
  */
-class Poll extends \yii\db\ActiveRecord
+class Poll extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -42,6 +46,7 @@ class Poll extends \yii\db\ActiveRecord
             [['user_id', 'type_id', 'is_hot'], 'default', 'value' => null],
             [['user_id', 'type_id', 'is_hot'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+            [['photo_url'],'string', 'max' => 255],
             [['photos_url'], 'each', 'rule' => ['string']],
             [['data'], 'string', 'max' => 255],
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollType::className(), 'targetAttribute' => ['type_id' => 'id']],
@@ -59,7 +64,8 @@ class Poll extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'type_id' => 'Type ID',
             'is_hot' => 'Is Hot',
-            'photos_url' => 'Photo Url',
+            'photo_url' => 'Photo Url',
+            'photos_url' => 'Photos Url',
             'data' => 'Data',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

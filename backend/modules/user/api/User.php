@@ -30,11 +30,12 @@ class User
 
         $model = new UploadAvatar();
         $model->image = UploadedFile::getInstanceByName('image');
-        if ($model->image && $model->upload(Yii::$app->user->id)) {
-            $user->photo_url = $model->imagePath;
+        if ($model->image && $model->upload()) {
+            $user->photo_url = $model->imageWebPath;
         }
 
         if (!$user->save()) {
+            $model->deleteImage();
             p($user->errors);
         }
 

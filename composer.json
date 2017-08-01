@@ -13,9 +13,9 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "*",
         "yiisoft/yii2-authclient": "~2.1.0",
-
         "fxp/composer-asset-plugin": "*",
-        "tigrov/yii2-pgsql": "dev-master"
+        "tigrov/yii2-pgsql": "dev-master",
+        "frostealth/yii2-aws-s3": "~2.0"
     },
 
 

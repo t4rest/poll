@@ -4,6 +4,7 @@ namespace backend\modules\poll\api;
 
 use common\exceptions;
 use common\models\UploadPollPhoto;
+use common\models\UploadPollPhotos;
 use yii;
 use common\models\Poll as PollModel;
 use common\models\PollChoice;
@@ -38,7 +39,6 @@ class Poll
         $pollPost = Yii::$app->request->post('poll', []);
         $choicesPost = Yii::$app->request->post('choices', []);
 
-
         if (empty($pollPost) || empty($choicesPost)) {
             throw exceptions\RequestException::invalidRequest();
         }
@@ -50,7 +50,7 @@ class Poll
             $poll->user_id = Yii::$app->user->id;
             $poll->setTime();
 
-            $images = new UploadPollPhoto();
+            $images = new UploadPollPhotos();
             $images->images = UploadedFile::getInstancesByName('images');
 
             if ($images->images && !$images->validate()) {
@@ -58,11 +58,26 @@ class Poll
             }
 
             if ($images->images && $images->upload()) {
-                $poll->photos_url = $images->imagesPath;
+                $poll->photos_url = $images->imagesWebPath;
             }
+
+            $image = new UploadPollPhoto();
+            $image->image = UploadedFile::getInstanceByName('image');
+
+
+            if ($image->image && !$image->validate()) {
+                $images->deleteImages();
+                throw exceptions\RequestException::invalidRequest('images');
+            }
+
+            if ($image->image && $image->upload()) {
+                $poll->photo_url = $image->imageWebPath;
+            }
+
 
             if (!$poll->save()) {
                 $images->deleteImages();
+                $image->deleteImage();
 
                 p($poll->errors);
                 throw exceptions\DatabaseException::recordOperationFail();
@@ -75,6 +90,7 @@ class Poll
                 $choice->count = 0;
                 if (!$choice->save()) {
                     $images->deleteImages();
+                    $image->deleteImage();
 
                     p($poll->errors);
                     throw exceptions\DatabaseException::recordOperationFail();

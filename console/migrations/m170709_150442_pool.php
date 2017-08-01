@@ -1,5 +1,6 @@
 <?php
 
+use common\models\PollType;
 use yii\db\Migration;
 
 class m170709_150442_pool extends Migration
@@ -18,8 +19,8 @@ class m170709_150442_pool extends Migration
             'user_id' => $this->integer(10)->notNull()->unsigned(),
             'type_id' => $this->smallInteger(1)->notNull()->unsigned(),
             'is_hot' => $this->smallInteger(1)->notNull()->defaultValue(0),
-//            'photo_url' => tigrov\pgsql\Schema::A,
-
+            'photo_storage' => $this->smallInteger(1)->notNull()->unsigned()->defaultValue(0),
+            'photo_url' => $this->string(),
             'data' => $this->string()->notNull(),
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->notNull(),
@@ -50,9 +51,9 @@ class m170709_150442_pool extends Migration
         $this->addForeignKey('fk-user_choice-choice_id-choice-id', 'poll_user_choice', 'choice_id', 'poll_choice', 'id', 'CASCADE', 'CASCADE');
 
 
-        $this->insert('poll_type', ['id' => 1, 'alias' => 'text', 'title' => 'Text']);
-        $this->insert('poll_type', ['id' => 2, 'alias' => 'single', 'title' => 'Single Photo']);
-        $this->insert('poll_type', ['id' => 3, 'alias' => 'compare', 'title' => 'Photo comparison']);
+        $this->insert('poll_type', ['id' => PollType::POLL_TYPE_TEXT, 'alias' => 'text', 'title' => 'Text']);
+        $this->insert('poll_type', ['id' => PollType::POLL_TYPE_SINGLE_PHOTO, 'alias' => 'single', 'title' => 'Single Photo']);
+        $this->insert('poll_type', ['id' => PollType::POLL_TYPE_PHOTO_COMPARISON, 'alias' => 'compare', 'title' => 'Photo comparison']);
     }
 
     public function safeDown()

@@ -13,6 +13,7 @@ class UploadAvatar extends Model
      */
     public $image;
     public $imagePath;
+    public $imageWebPath;
 
     public function rules()
     {
@@ -21,17 +22,51 @@ class UploadAvatar extends Model
         ];
     }
 
-    public function upload(int $userId)
+    public function upload()
     {
-        $path = '/web/avatar/' . md5('user-avatar' . $userId) . '.' . $this->image->extension;
-        $imagePath = Yii::getAlias('@frontend') . $path;
-        $this->imagePath = Url::base(true) . $path;
-
-        if ($this->validate()) {
-            $this->image->saveAs($imagePath);
-            return true;
-        } else {
+        if (!$this->validate()) {
             return false;
         }
+
+        $this->imagePath = 'avatar'
+            . '/'
+            . md5('user-avatar' . Yii::$app->user->id)
+            . '/'
+            . md5('user-avatar' . $this->image->baseName)
+            . '.'
+            . $this->image->extension;
+
+        /**
+         * @var \frostealth\yii2\aws\s3\Service $s3
+         */
+        $s3 = Yii::$app->get('s3');
+
+        /**
+         * @var $result \Aws\Result
+         */
+        $result = $s3->commands()
+            ->upload($this->imagePath, $this->image->tempName)
+            ->withContentType('image')
+            ->execute();
+
+        $data = $result->toArray();
+
+        $this->imageWebPath = $data['ObjectURL'] ?? '';
+
+        unlink($this->image->tempName);
+
+        return isset($data['ObjectURL']);
+    }
+
+    /**
+     *
+     */
+    public function deleteImage()
+    {
+        /**
+         * @var \frostealth\yii2\aws\s3\Service $s3
+         */
+        $s3 = Yii::$app->get('s3');
+        $s3->commands()->delete($this->imagePath)->execute();
     }
 }
