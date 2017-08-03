@@ -42,6 +42,10 @@ class BaseAuthHandler
         $authNetwork->token = yii\helpers\Json::encode($this->client->getAccessToken()->getParams());
         $authNetwork->data = yii\helpers\Json::encode($attributes);
 
+        if(! $authNetwork->save()) {
+            p($authNetwork->errors);
+        }
+
         return $authNetwork->save();
     }
 }

@@ -35,8 +35,6 @@ class AuthHandlerMobile extends BaseAuthHandler
         $tokenOauth = new OAuthToken();
         if ($client == Facebook::CODE) {
             $tokenOauth->tokenParamKey = 'access_token';
-        } else {
-            $tokenOauth->tokenParamKey = 'oauth_token';
         }
 
         $tokenOauth->setParams($token);
@@ -52,11 +50,13 @@ class AuthHandlerMobile extends BaseAuthHandler
             $user = new User($this->client->getUserDbAttributes($attributes));
             $user->generateAuthKey();
             $user->setTime();
-            $user->save();
+            if (!$user->save()) {
+                p($user->errors);
+            }
         }
 
         if (!$this->saveAuthClient($user->id, $authNetwork, $attributes)) {
-            throw exceptions\DatabaseException::recordOperationFail();
+
         }
 
         return $user->toArray();
