@@ -5,7 +5,7 @@ use frontend\modules\main\components\MainController;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\clients\AuthHandler;
+use common\clients\auth\AuthHandler;
 
 
 class SiteController extends MainController

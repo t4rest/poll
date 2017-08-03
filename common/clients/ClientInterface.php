@@ -2,7 +2,7 @@
 
 namespace common\clients;
 
-interface ClintInterface
+interface ClientInterface
 {
     public function getClientId(): int;
 

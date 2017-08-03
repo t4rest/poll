@@ -5,7 +5,13 @@ namespace common\clients;
 use Yii;
 use yii\authclient\clients\Twitter as TwitterClient;
 
-class Twitter extends TwitterClient implements ClintInterface
+/**
+ * Class Twitter
+ * @package common\clients
+ *
+ * @property int $clientId
+ */
+class Twitter extends TwitterClient implements ClientInterface
 {
     use StateStorage;
 

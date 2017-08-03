@@ -5,7 +5,7 @@ namespace common\clients;
 use Yii;
 use yii\authclient\clients\Facebook as FacebookClient;
 
-class Facebook extends FacebookClient implements ClintInterface
+class Facebook extends FacebookClient implements ClientInterface
 {
     use StateStorage;
 

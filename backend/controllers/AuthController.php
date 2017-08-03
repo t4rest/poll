@@ -3,18 +3,10 @@
 namespace backend\controllers;
 
 use common\exceptions;
-use yii\web\Controller;
 use yii;
 
-abstract class AuthController extends Controller
+abstract class AuthController extends BaseController
 {
-    public function init()
-    {
-        parent::init();
-        $this->enableCsrfValidation = false;
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    }
-
     /**
      * @param yii\base\Action $action
      * @return bool
@@ -30,17 +22,5 @@ abstract class AuthController extends Controller
         }
 
         return parent::beforeAction($action);
-    }
-
-    /**
-     * @param array|bool $data
-     * @return array
-     */
-    public function responseSuccess($data): array
-    {
-        return [
-            'status' => 'success',
-            'data' => $data
-        ];
     }
 }

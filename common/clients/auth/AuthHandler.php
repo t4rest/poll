@@ -1,35 +1,29 @@
 <?php
 
-namespace common\clients;
+namespace common\clients\auth;
 
+use common\clients\ClientInterface;
+use common\clients\Facebook;
+use common\clients\Twitter;
 use common\models\Auth;
 use common\models\User;
+use common\exceptions;
 use Yii;
-use yii\authclient\BaseOAuth;
-use yii\authclient\ClientInterface;
 
 /**
  * AuthHandler handles successful authentication via Yii auth component
  */
-class AuthHandler
+class AuthHandler extends BaseAuthHandler
 {
     /**
-     * @var ClientInterface|ClintInterface|BaseOAuth
+     * AuthHandler constructor.
+     * @param ClientInterface|Facebook|Twitter $client
+     * @throws \Exception
      */
-    private $client;
-
-    /**
-     * @var array
-     */
-    private $supportedClient = [
-        Facebook::CODE,
-        Twitter::CODE
-    ];
-
     public function __construct(ClientInterface $client)
     {
         if (!in_array($client->getId(), $this->supportedClient)) {
-            throw new \Exception('Client does not support');
+            throw exceptions\RequestException::invalidRequest('Client does not support');
         }
 
         $this->client = $client;
@@ -58,30 +52,11 @@ class AuthHandler
             return;
         }
 
-        if($this->saveAuthClient($authNetwork, $attributes)) {
+        if($this->saveAuthClient(Yii::$app->user->id, $authNetwork, $attributes)) {
             Yii::$app->session->set('auth_token', Yii::$app->user->getIdentity()->getAuthKey());
         } else {
             Yii::$app->session->set('auth_error', Yii::t('app', 'Unable to save {client} account.', ['client' => $this->client->getTitle()]));
         }
     }
 
-    /**
-     * @param $authNetwork
-     * @param array $attributes
-     * @return bool
-     */
-    public function saveAuthClient($authNetwork, array $attributes): bool
-    {
-        if (!$authNetwork) {
-            $authNetwork = new Auth();
-            $authNetwork->id = (string)$attributes['id'];
-            $authNetwork->user_id = Yii::$app->user->id;
-            $authNetwork->source_id = $this->client->getClientId();
-        }
-
-        $authNetwork->token = yii\helpers\Json::encode($this->client->getAccessToken()->getParams());
-        $authNetwork->data = yii\helpers\Json::encode($attributes);
-
-        return $authNetwork->save();
-    }
 }
