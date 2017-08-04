@@ -1,18 +1,18 @@
 <?php
 
-namespace backend\api\pagination;
+namespace common\pagination;
 
 abstract class Base
 {
     /**
      * Default limit value
      */
-    const DEFAULT_LIMIT = 50;
+    const DEFAULT_LIMIT = 20;
 
     /**
      * Maximum limit value
      */
-    const MAX_LIMIT = 100;
+    const MAX_LIMIT = 50;
 
     /**
      * Records limit value

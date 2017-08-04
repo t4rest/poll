@@ -1,15 +1,22 @@
 <?php
 
-namespace backend\api\pagination;
+namespace common\pagination;
 
 class OffsetBased extends Base
 {
+    const DEFAULT_OFFSET = 0;
+
     /**
      * Offset pagination value
      *
      * @var int
      */
     private $_offset = 0;
+
+    /**
+     * @var bool
+     */
+    private $_next = false;
 
     /**
      * Class constructor.
@@ -25,6 +32,22 @@ class OffsetBased extends Base
         if (!is_null($limit)) {
             $this->setLimit($limit);
         }
+    }
+
+    /**
+     * @param bool $next
+     */
+    public function setNext(bool $next = false)
+    {
+        $this->_next = $next;
+    }
+
+    /**
+     * @return bool
+     */
+    public function issetNext(): bool
+    {
+        return $this->_next;
     }
 
     /**

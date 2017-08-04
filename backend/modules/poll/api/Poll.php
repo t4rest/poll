@@ -9,6 +9,7 @@ use yii;
 use common\models\Poll as PollModel;
 use common\models\PollChoice;
 use yii\web\UploadedFile;
+use common\pagination;
 
 class Poll
 {
@@ -16,32 +17,46 @@ class Poll
     /**
      * @param array $search
      * @param array $filter
+     * @param pagination\OffsetBased $pagination
      * @return array
      */
-    public function getPolls(array $search = [], array $filter = []): array
+    public function getPolls(array $search = [], array $filter = [], pagination\OffsetBased $pagination): array
     {
         $polls = PollModel::find()
             ->with('choices')
             ->where(['user_id' => Yii::$app->user->id])
+            ->limit($pagination->getLimit() + 1) // in this way we check if we have next paginated page
+            ->offset($pagination->getOffset())
             ->asArray()
             ->all();
+
+        if (count($polls) > $pagination->getLimit()) {
+
+            /**
+             * remove extra last element from array if count more than limit
+             * to avoid extra query to db
+             */
+            $pagination->setNext(true);
+            array_pop($polls);
+        }
 
         return $polls;
     }
 
     /**
+     * @param $pollPost
+     * @param $choicesPost
      * @return array
+     * @throws exceptions\RequestException
      * @throws yii\base\Exception
      */
-    public function createPoll(): array
+    public function createPoll($pollPost, $choicesPost): array
     {
-        $tr = PollModel::getDb()->beginTransaction();
-        $pollPost = Yii::$app->request->post('poll', []);
-        $choicesPost = Yii::$app->request->post('choices', []);
-
         if (empty($pollPost) || empty($choicesPost)) {
             throw exceptions\RequestException::invalidRequest();
         }
+
+        $tr = PollModel::getDb()->beginTransaction();
 
         try {
 
@@ -71,13 +86,14 @@ class Poll
             }
 
             if ($image->image && $image->upload()) {
+
                 $poll->photo_url = $image->imageWebPath;
             }
 
 
             if (!$poll->save()) {
-                $images->deleteImages();
-                $image->deleteImage();
+//                $images->deleteImages();
+//                $image->deleteImage();
 
                 p($poll->errors);
                 throw exceptions\DatabaseException::recordOperationFail();
@@ -96,7 +112,6 @@ class Poll
                     throw exceptions\DatabaseException::recordOperationFail();
                 }
             }
-
 
             $tr->commit();
         } catch (yii\base\Exception $e) {

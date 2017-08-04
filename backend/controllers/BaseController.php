@@ -2,9 +2,9 @@
 
 namespace backend\controllers;
 
-use common\exceptions;
 use yii\web\Controller;
-use yii;
+use common\pagination;
+use yii\web\Response;
 
 abstract class BaseController extends Controller
 {
@@ -12,18 +12,25 @@ abstract class BaseController extends Controller
     {
         parent::init();
         $this->enableCsrfValidation = false;
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        \Yii::$app->response->format = Response::FORMAT_JSON;
     }
 
     /**
-     * @param array|bool $data
+     * @param $data
+     * @param pagination\OffsetBased|null $pagination
      * @return array
      */
-    public function responseSuccess($data): array
+    public function responseSuccess($data, pagination\OffsetBased $pagination = null): array
     {
-        return [
+        $response = [
             'status' => 'success',
             'data' => $data
         ];
+
+        if (!empty($pagination)) {
+            $response['next'] = $pagination->issetNext();
+        }
+
+        return $response;
     }
 }

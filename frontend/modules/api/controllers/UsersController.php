@@ -4,6 +4,8 @@ namespace frontend\modules\api\controllers;
 
 use backend\modules\user\api\Users;
 use frontend\modules\api\components\MainController;
+use common\pagination;
+use Yii;
 
 class UsersController extends MainController
 {
@@ -25,8 +27,20 @@ class UsersController extends MainController
      */
     public function actionIndex(): array
     {
+        $pagination = new pagination\OffsetBased(
+            Yii::$app->request->get('offset', pagination\OffsetBased::DEFAULT_OFFSET),
+            Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
+        );
+
+        $result = $this->api->userList(
+            Yii::$app->request->get('search', []),
+            Yii::$app->request->get('filter', []),
+            $pagination
+        );
+
         return $this->responseSuccess(
-            $this->api->userList()
+            $result,
+            $pagination
         );
     }
 
@@ -35,8 +49,16 @@ class UsersController extends MainController
      */
     public function actionIFollow(): array
     {
+        $pagination = new pagination\OffsetBased(
+            Yii::$app->request->get('offset', pagination\OffsetBased::DEFAULT_OFFSET),
+            Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
+        );
+
+        $result = $this->api->iFollow();
+
         return $this->responseSuccess(
-            $this->api->iFollow()
+            $result,
+            $pagination
         );
     }
 
@@ -45,8 +67,16 @@ class UsersController extends MainController
      */
     public function actionMyFollowers(): array
     {
+        $pagination = new pagination\OffsetBased(
+            Yii::$app->request->get('offset', pagination\OffsetBased::DEFAULT_OFFSET),
+            Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
+        );
+
+        $result = $this->api->myFollowers();
+
         return $this->responseSuccess(
-            $this->api->myFollowers()
+            $result,
+            $pagination
         );
     }
 

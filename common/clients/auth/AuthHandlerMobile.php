@@ -3,7 +3,6 @@
 namespace common\clients\auth;
 
 use common\clients\Facebook;
-use common\clients\Twitter;
 use common\models\Auth;
 use common\models\User;
 use common\exceptions;
@@ -16,11 +15,8 @@ use yii\authclient\OAuthToken;
 class AuthHandlerMobile extends BaseAuthHandler
 {
 
-    public function handle()
+    public function handle($client, $token)
     {
-        $client = Yii::$app->request->post('client');
-        $token = Yii::$app->request->post('token', []);
-
         if (empty($client) || empty($token)) {
             throw exceptions\RequestException::invalidRequest();
         }
@@ -28,7 +24,6 @@ class AuthHandlerMobile extends BaseAuthHandler
         if (!in_array($client, $this->supportedClient)) {
             throw exceptions\RequestException::invalidRequest('Client does not support');
         }
-
 
         $this->client = Yii::$app->authClientCollection->getClient($client);
 

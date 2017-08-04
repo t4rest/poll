@@ -2,8 +2,10 @@
 
 namespace frontend\modules\api\controllers;
 
- use backend\modules\poll\api\Feed;
- use frontend\modules\api\components\MainController;
+use backend\modules\poll\api\Feed;
+use frontend\modules\api\components\MainController;
+use common\pagination;
+use Yii;
 
 class FeedController extends MainController
 {
@@ -22,8 +24,20 @@ class FeedController extends MainController
 
     public function actionFeed(): array
     {
+        $pagination = new pagination\OffsetBased(
+            Yii::$app->request->get('offset', pagination\OffsetBased::DEFAULT_OFFSET),
+            Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
+        );
+
+        $result = $this->api->feed(
+            Yii::$app->request->get('search', []),
+            Yii::$app->request->get('filter', []),
+            $pagination
+        );
+
         return $this->responseSuccess(
-            $this->api->feed()
+            $result,
+            $pagination
         );
     }
 

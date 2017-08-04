@@ -4,6 +4,8 @@ namespace frontend\modules\api\controllers;
 
 use backend\modules\poll\api\Poll;
 use frontend\modules\api\components\MainController;
+use common\pagination;
+use Yii;
 
 class PollController extends MainController
 {
@@ -22,8 +24,20 @@ class PollController extends MainController
 
     public function actionPolls(): array
     {
+        $pagination = new pagination\OffsetBased(
+            Yii::$app->request->get('offset', pagination\OffsetBased::DEFAULT_OFFSET),
+            Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
+        );
+
+        $result = $this->api->getPolls(
+            Yii::$app->request->get('search', []),
+            Yii::$app->request->get('filter', []),
+            $pagination
+        );
+
         return $this->responseSuccess(
-            $this->api->getPolls()
+            $result,
+            $pagination
         );
     }
 
@@ -37,7 +51,10 @@ class PollController extends MainController
     public function actionCreatePoll(): array
     {
         return $this->responseSuccess(
-            $this->api->createPoll()
+            $this->api->createPoll(
+                Yii::$app->request->post('choices', []),
+                Yii::$app->request->post('choices', [])
+            )
         );
     }
 

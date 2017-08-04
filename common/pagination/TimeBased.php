@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\api\pagination;
+namespace common\pagination;
 
 class TimeBased extends Base
 {

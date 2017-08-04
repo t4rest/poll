@@ -8,26 +8,41 @@ use common\models\Poll as PollModel;
 use common\models\PollChoice;
 use common\models\PollUserChoice;
 use common\exceptions;
+use common\pagination;
 
 class Feed
 {
     /**
+     * @param array $search
      * @param array $filter
+     * @param pagination\OffsetBased $pagination
      * @return array|yii\db\ActiveRecord[]
      */
-    public function feed(array $filter = [])
+    public function feed(array $search = [], array $filter = [], pagination\OffsetBased $pagination)
     {
         $subQuery = UserFriend::find()
             ->select('friend_id')
             ->where(['user_id' => Yii::$app->user->id]);
 
         $polls = PollModel::find()
-            ->with(['choices', 'user', 'pollUserChoice' => function ($queryVote) {
+            ->with(['choices', 'user', 'pollUserChoice' => function (\yii\db\ActiveQuery $queryVote) {
                 $queryVote->where(['user_id' => Yii::$app->user->id]);
             }])
             ->where(['user_id' => $subQuery])
+            ->limit($pagination->getLimit() + 1) // in this way we check if we have next paginated page
+            ->offset($pagination->getOffset())
             ->asArray()
             ->all();
+
+        if (count($polls) > $pagination->getLimit()) {
+
+            /**
+             * remove extra last element from array if count more than limit
+             * to avoid extra query to db
+             */
+            $pagination->setNext(true);
+            array_pop($polls);
+        }
 
         return $polls;
     }
@@ -53,9 +68,6 @@ class Feed
             throw exceptions\RequestException::invalidRequest();
         }
 
-        $choice->count += 1;
-        $choice->save();
-
         $userChoice = PollUserChoice::find()
             ->where(['poll_id' => $pollId, 'user_id' => Yii::$app->user->id])
             ->one();
@@ -63,6 +75,9 @@ class Feed
         if (!empty($userChoice)) {
             return true;
         }
+
+        $choice->count += 1;
+        $choice->save();
 
         $userChoice = new PollUserChoice();
         $userChoice->user_id = Yii::$app->user->id;

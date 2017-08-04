@@ -6,35 +6,75 @@ use common\models\User as UserModel;
 use common\models\UserFriend;
 use Yii;
 use common\exceptions;
+use common\pagination;
 
 class Users
 {
-    public function userList(): array
+    /**
+     * @param array $search
+     * @param array $filter
+     * @param pagination\OffsetBased $pagination
+     * @return array
+     */
+    public function userList(array $search = [], array $filter = [], pagination\OffsetBased $pagination): array
     {
-        $search = Yii::$app->request->get('search');
-        $users = UserModel::find()
+        $usersModel = UserModel::find()
             ->with('friends')
             ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
-            ->where(['status' => UserModel::STATUS_ACTIVE])
-            ->asArray();
+            ->where(['status' => UserModel::STATUS_ACTIVE]);
 
-        if (!empty($search)) {
-            $users->andWhere(['like', 'username', $search]);
+        if (isset($search['username'])) {
+            $usersModel->andWhere(['like', 'username', $search['username']]);
         }
 
-        return $users->all();
+        $users = $usersModel
+            ->limit($pagination->getLimit() + 1)// in this way we check if we have next paginated page
+            ->offset($pagination->getOffset())
+            ->asArray()
+            ->all();
+
+        if (count($users) > $pagination->getLimit()) {
+
+            /**
+             * remove extra last element from array if count more than limit
+             * to avoid extra query to db
+             */
+            $pagination->setNext(true);
+            array_pop($users);
+        }
+
+        return $users;
     }
 
-    public function iFollow()
+    /**
+     * @param array $search
+     * @param array $filter
+     * @param pagination\OffsetBased $pagination
+     * @return array
+     */
+    public function iFollow(array $search = [], array $filter = [], pagination\OffsetBased $pagination): array
     {
         $friendsIds = UserFriend::find()
             ->select(['friend_id'])
             ->where(['user_id' => Yii::$app->user->id])
-            ->asArray()
             ->indexBy('friend_id')
+            ->limit($pagination->getLimit() + 1)// in this way we check if we have next paginated page
+            ->offset($pagination->getOffset())
+            ->asArray()
             ->all();
 
+        if (count($friendsIds) > $pagination->getLimit()) {
+
+            /**
+             * remove extra last element from array if count more than limit
+             * to avoid extra query to db
+             */
+            $pagination->setNext(true);
+            array_pop($friendsIds);
+        }
+
         $users = UserModel::find()
+            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
             ->where(['id' => array_keys($friendsIds)])
             ->asArray()
             ->all();
@@ -42,14 +82,33 @@ class Users
         return $users;
     }
 
-    public function myFollowers()
+    /**
+     * @param array $search
+     * @param array $filter
+     * @param pagination\OffsetBased $pagination
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function myFollowers(array $search = [], array $filter = [], pagination\OffsetBased $pagination): array
     {
         $friendsIds = UserFriend::find()
             ->select(['user_id'])
             ->where(['friend_id' => Yii::$app->user->id])
             ->indexBy('user_id')
+            ->limit($pagination->getLimit() + 1)// in this way we check if we have next paginated page
+            ->offset($pagination->getOffset())
             ->asArray()
             ->all();
+
+
+        if (count($friendsIds) > $pagination->getLimit()) {
+
+            /**
+             * remove extra last element from array if count more than limit
+             * to avoid extra query to db
+             */
+            $pagination->setNext(true);
+            array_pop($friendsIds);
+        }
 
         $users = UserModel::find()
             ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
@@ -60,7 +119,12 @@ class Users
         return $users;
     }
 
-    public function follow($userId)
+    /**
+     * @param $userId
+     * @return array
+     * @throws exceptions\RequestException
+     */
+    public function follow($userId): array
     {
         $friend = UserFriend::find()
             ->where(['friend_id' => $userId, 'user_id' => Yii::$app->user->id])
@@ -72,7 +136,8 @@ class Users
         }
 
         $user = UserModel::find()
-            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
+//            ->select(["id", "username", "first_name", "last_name", "email", "photo_url", "country"])
+            ->select(["id"])
             ->where(['id' => $userId])
             ->asArray()
             ->one();
@@ -90,7 +155,11 @@ class Users
         return $friend->toArray();
     }
 
-    public function unfollow($userId)
+    /**
+     * @param $userId
+     * @return bool
+     */
+    public function unfollow($userId): bool
     {
         $friend = UserFriend::find()
             ->where(['friend_id' => $userId, 'user_id' => Yii::$app->user->id])
