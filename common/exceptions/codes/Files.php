@@ -7,9 +7,7 @@ class Files extends BaseCodes
     const INCORRECT_FILETYPE = 305;
     const FILE_REQUIRED = 306;
     const IS_NOT_IMAGE = 307;
-
-    const INVALID_FILESYSTEM_RESPONSE = 308;
-    const UNSUPPORTED_IMAGE_TYPE = 309;
+    const UNSUPPORTED_IMAGE_TYPE = 308;
 
     /**
      * @return array
@@ -32,10 +30,6 @@ class Files extends BaseCodes
             self::IS_NOT_IMAGE => [
                 'statusCode' => 500,
                 'message' => 'File is not image'
-            ],
-            self::INVALID_FILESYSTEM_RESPONSE => [
-                'statusCode' => 500,
-                'message' => 'GridFs driver response is incorrect'
             ],
             self::UNSUPPORTED_IMAGE_TYPE => [
                 'statusCode' => 500,

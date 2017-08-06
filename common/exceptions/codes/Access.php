@@ -11,9 +11,6 @@ class Access extends BaseCodes
     const DISABLED_ACCOUNT = 10203;
     const TOKEN_NOT_FOUND = 10204;
     const INVALID_TOKEN = 10205;
-    const EXPIRED_SUAT = 10206;
-    const ARGUS_USER_NOT_FOUND = 10207;
-
     const DISABLED_MODULE = 103;
 
     /**
@@ -42,25 +39,9 @@ class Access extends BaseCodes
                 'statusCode' => 401,
                 'message' => 'Account is disabled'
             ],
-            self::TOKEN_NOT_FOUND => [
-                'statusCode' => 401,
-                'message' => 'TOTP token was not send'
-            ],
             self::INVALID_TOKEN => [
                 'statusCode' => 401,
                 'message' => 'Invalid token'
-            ],
-            self::EXPIRED_SUAT => [
-                'statusCode' => 401,
-                'message' => 'Expired suat'
-            ],
-            self::ARGUS_USER_NOT_FOUND => [
-                'statusCode' => 401,
-                'message' => 'Can not find argus user identity. Tokens pair suid/suat are invalid'
-            ],
-            self::DISABLED_MODULE => [
-                'statusCode' => 403,
-                'message' => 'You can not access this endpoint. Module was disabled by user'
             ]
         ];
     }
