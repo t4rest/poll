@@ -150,7 +150,7 @@ class Users
         $friend->user_id = Yii::$app->user->id;
         $friend->friend_id = $userId;
         $friend->setTime();
-        if ($friend->save()) {
+        if (!$friend->save()) {
             throw exceptions\RequestException::invalidRequestError($friend->getErrors());
         }
 

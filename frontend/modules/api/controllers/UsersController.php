@@ -54,7 +54,11 @@ class UsersController extends MainController
             Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
         );
 
-        $result = $this->api->iFollow();
+        $result = $this->api->iFollow(
+            Yii::$app->request->get('search', []),
+            Yii::$app->request->get('filter', []),
+            $pagination
+        );
 
         return $this->responseSuccess(
             $result,
@@ -72,7 +76,11 @@ class UsersController extends MainController
             Yii::$app->request->get('limit', pagination\OffsetBased::DEFAULT_LIMIT)
         );
 
-        $result = $this->api->myFollowers();
+        $result = $this->api->myFollowers(
+            Yii::$app->request->get('search', []),
+            Yii::$app->request->get('filter', []),
+            $pagination
+        );
 
         return $this->responseSuccess(
             $result,
