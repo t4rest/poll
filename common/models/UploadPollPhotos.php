@@ -31,8 +31,6 @@ class UploadPollPhotos extends Model
             return false;
         }
 
-
-        $i = 1;
         foreach ($this->images as $file) {
 
             $path = 'poll'
@@ -42,6 +40,7 @@ class UploadPollPhotos extends Model
                 . md5('poll' . $file->baseName . uniqid())
                 . '.'
                 . $file->extension;
+
             $this->imagesPath[] = $path;
 
             /**
@@ -60,15 +59,15 @@ class UploadPollPhotos extends Model
             $data = $result->toArray();
 
 
-            $this->imagesWebPath[] = $data['ObjectURL'] ?? '';
 
             unlink($file->tempName);
 
             if (!isset($data['ObjectURL'])) {
+                $this->deleteImages();
                 return false;
             }
 
-            $i++;
+            $this->imagesWebPath[] = $data['ObjectURL'];
         }
 
         return true;

@@ -66,7 +66,7 @@ class Poll
         $tr = PollModel::getDb()->beginTransaction();
 
         try {
-
+            $choicesArr = [];
             $poll = new PollModel();
             $poll->setAttributes($pollPost);
             $poll->user_id = Yii::$app->user->id;
@@ -91,16 +91,19 @@ class Poll
             if (!$poll->save()) {
                 throw exceptions\RequestException::invalidRequestError($poll->getErrors());
             }
+            $result = $poll->toArray();
 
             foreach ($choicesPost as $item) {
                 $choice = new PollChoice();
-                $choice->data = $item;
+                $choice->text = $item;
                 $choice->poll_id = $poll->id;
                 $choice->count = 0;
                 if (!$choice->save()) {
                     throw exceptions\RequestException::invalidRequestError($poll->getErrors());
                 }
+                $choicesArr[] = $choice->toArray();
             }
+            $result['choices'] = $choicesArr;
 
             $tr->commit();
         } catch (yii\base\Exception $e) {
@@ -116,7 +119,8 @@ class Poll
             throw $e;
         }
 
-        return $poll->toArray();
+
+        return $result;
     }
 
     /**

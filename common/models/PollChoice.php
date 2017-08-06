@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $poll_id
- * @property string $data
+ * @property string $text
  * @property int $count
  *
  * @property Poll $poll
@@ -31,10 +31,10 @@ class PollChoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['poll_id', 'data', 'count'], 'required'],
+            [['poll_id', 'text', 'count'], 'required'],
             [['poll_id', 'count'], 'default', 'value' => null],
             [['poll_id', 'count'], 'integer'],
-            [['data'], 'string', 'max' => 255],
+            [['text'], 'string', 'max' => 255],
             [['poll_id'], 'exist', 'skipOnError' => true, 'targetClass' => Poll::className(), 'targetAttribute' => ['poll_id' => 'id']],
         ];
     }
@@ -47,7 +47,7 @@ class PollChoice extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'poll_id' => 'Poll ID',
-            'data' => 'Data',
+            'text' => 'Text',
             'count' => 'Count',
         ];
     }

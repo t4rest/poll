@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $photo_storage
  * @property string $photo_url
  * @property string $photos_url
- * @property string $data
+ * @property string $text
  * @property string $created_at
  * @property string $updated_at
  *
@@ -42,13 +42,13 @@ class Poll extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'type_id', 'data', 'created_at', 'updated_at'], 'required'],
+            [['user_id', 'type_id', 'text', 'created_at', 'updated_at'], 'required'],
             [['user_id', 'type_id', 'is_hot'], 'default', 'value' => null],
             [['user_id', 'type_id', 'is_hot'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['photo_url'],'string', 'max' => 255],
             [['photos_url'], 'each', 'rule' => ['string']],
-            [['data'], 'string', 'max' => 255],
+            [['text'], 'string', 'max' => 255],
             [['type_id'], 'exist', 'skipOnError' => true, 'targetClass' => PollType::className(), 'targetAttribute' => ['type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -66,7 +66,7 @@ class Poll extends ActiveRecord
             'is_hot' => 'Is Hot',
             'photo_url' => 'Photo Url',
             'photos_url' => 'Photos Url',
-            'data' => 'Data',
+            'text' => 'Text',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

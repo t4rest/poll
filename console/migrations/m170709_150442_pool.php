@@ -21,7 +21,7 @@ class m170709_150442_pool extends Migration
             'is_hot' => $this->smallInteger(1)->notNull()->defaultValue(0),
             'photo_storage' => $this->smallInteger(1)->notNull()->unsigned()->defaultValue(0),
             'photo_url' => $this->string(),
-            'data' => $this->string()->notNull(),
+            'text' => $this->string()->notNull(),
             'created_at' => $this->timestamp()->notNull(),
             'updated_at' => $this->timestamp()->notNull(),
         ]);
@@ -33,7 +33,7 @@ class m170709_150442_pool extends Migration
         $this->createTable('poll_choice', [
             'id' => $this->primaryKey(10)->unsigned(),
             'poll_id' => $this->integer(10)->notNull()->unsigned(),
-            'data' => $this->string()->notNull(),
+            'text' => $this->string()->notNull(),
             'count' => $this->integer(10)->notNull()->unsigned()->defaultValue(0),
         ]);
         $this->addForeignKey('fk-choice-poll_id-poll-id', 'poll_choice', 'poll_id', 'poll', 'id', 'CASCADE', 'CASCADE');
