@@ -150,7 +150,9 @@ class Users
         $friend->user_id = Yii::$app->user->id;
         $friend->friend_id = $userId;
         $friend->setTime();
-        $friend->save();
+        if ($friend->save()) {
+            throw exceptions\RequestException::invalidRequestError($friend->getErrors());
+        }
 
         return $friend->toArray();
     }
@@ -166,7 +168,7 @@ class Users
             ->one();
 
         if ($friend) {
-            $friend->delete();
+            return (bool)$friend->delete();
         }
 
         return true;

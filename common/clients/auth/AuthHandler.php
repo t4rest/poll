@@ -39,10 +39,7 @@ class AuthHandler extends BaseAuthHandler
             if ($authNetwork) {
                 $user = User::findOne($authNetwork->user_id);
             } else {
-                $user = new User($this->client->getUserDbAttributes($attributes));
-                $user->generateAuthKey();
-                $user->setTime();
-                $user->save();
+                $user = $this->createUser($attributes);
             }
 
             Yii::$app->user->login($user);

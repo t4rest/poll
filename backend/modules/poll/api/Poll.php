@@ -44,6 +44,7 @@ class Poll
     }
 
     /**
+     * todo: refactor this method
      * @param $pollPost
      * @param $choicesPost
      * @return array
@@ -56,6 +57,12 @@ class Poll
             throw exceptions\RequestException::invalidRequest();
         }
 
+        $image = new UploadPollPhoto();
+        $image->image = UploadedFile::getInstanceByName('image');
+
+        $images = new UploadPollPhotos();
+        $images->images = UploadedFile::getInstancesByName('images');
+
         $tr = PollModel::getDb()->beginTransaction();
 
         try {
@@ -65,38 +72,24 @@ class Poll
             $poll->user_id = Yii::$app->user->id;
             $poll->setTime();
 
-            $images = new UploadPollPhotos();
-            $images->images = UploadedFile::getInstancesByName('images');
-
             if ($images->images && !$images->validate()) {
-                throw exceptions\RequestException::invalidRequest('images');
+                throw exceptions\RequestException::invalidRequestError($images->getErrors());
             }
 
             if ($images->images && $images->upload()) {
                 $poll->photos_url = $images->imagesWebPath;
             }
 
-            $image = new UploadPollPhoto();
-            $image->image = UploadedFile::getInstanceByName('image');
-
-
             if ($image->image && !$image->validate()) {
-                $images->deleteImages();
-                throw exceptions\RequestException::invalidRequest('images');
+                throw exceptions\RequestException::invalidRequestError($image->getErrors());
             }
 
             if ($image->image && $image->upload()) {
-
                 $poll->photo_url = $image->imageWebPath;
             }
 
-
             if (!$poll->save()) {
-//                $images->deleteImages();
-//                $image->deleteImage();
-
-                p($poll->errors);
-                throw exceptions\DatabaseException::recordOperationFail();
+                throw exceptions\RequestException::invalidRequestError($poll->getErrors());
             }
 
             foreach ($choicesPost as $item) {
@@ -105,17 +98,21 @@ class Poll
                 $choice->poll_id = $poll->id;
                 $choice->count = 0;
                 if (!$choice->save()) {
-                    $images->deleteImages();
-                    $image->deleteImage();
-
-                    p($poll->errors);
-                    throw exceptions\DatabaseException::recordOperationFail();
+                    throw exceptions\RequestException::invalidRequestError($poll->getErrors());
                 }
             }
 
             $tr->commit();
         } catch (yii\base\Exception $e) {
             $tr->rollBack();
+            if ($images->imagesPath) {
+                $images->deleteImages();
+            }
+
+            if ($image->imagePath) {
+                $image->deleteImage();
+            }
+
             throw $e;
         }
 
@@ -125,7 +122,8 @@ class Poll
     /**
      * @param $id
      * @return array
-     * @throws exceptions\DatabaseException
+     * @throws exceptions\AccessException
+     * @throws exceptions\RequestException
      */
     public function getPoll($id): array
     {
@@ -135,13 +133,21 @@ class Poll
             ->asArray()
             ->one();
 
+        if (!$poll) {
+            throw exceptions\RequestException::invalidRequest('Poll does not exists');
+        }
+
+        if ($poll->user_id != Yii::$app->user->id) {
+            throw exceptions\AccessException::deniedPermission();
+        }
+
         return $poll;
     }
-
 
     /**
      * @param $id
      * @return bool
+     * @throws exceptions\AccessException
      * @throws exceptions\RequestException
      */
     public function deletePoll($id): bool
@@ -152,9 +158,11 @@ class Poll
             throw exceptions\RequestException::invalidRequest('Poll does not exists');
         }
 
-        $poll->delete();
+        if ($poll->user_id != Yii::$app->user->id) {
+            throw exceptions\AccessException::deniedPermission();
+        }
 
-        return true;
+        return (bool)$poll->delete();
     }
 
 //    /**

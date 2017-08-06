@@ -14,8 +14,14 @@ use yii\authclient\OAuthToken;
  */
 class AuthHandlerMobile extends BaseAuthHandler
 {
-
-    public function handle($client, $token)
+    /**
+     * @param $client
+     * @param $token
+     * @param $userId
+     * @return array
+     * @throws exceptions\RequestException
+     */
+    public function handle($client, $token, $userId)
     {
         if (empty($client) || empty($token)) {
             throw exceptions\RequestException::invalidRequest();
@@ -40,19 +46,17 @@ class AuthHandlerMobile extends BaseAuthHandler
         $authNetwork = Auth::findOne(['id' => $attributes['id'], 'source_id' => $this->client->getClientId()]);
 
         if ($authNetwork) {
+
+            if (!empty($userId) && $userId != $authNetwork->user_id) {
+                throw exceptions\RequestException::invalidRequest(Yii::t('app', 'Unable to link {client} account. There is another user using it.', ['client' => $this->client->getTitle()]));
+            }
+
             $user = User::findOne($authNetwork->user_id);
         } else {
-            $user = new User($this->client->getUserDbAttributes($attributes));
-            $user->generateAuthKey();
-            $user->setTime();
-            if (!$user->save()) {
-                p($user->errors);
-            }
+            $user = $this->createUser($attributes);
         }
 
-        if (!$this->saveAuthClient($user->id, $authNetwork, $attributes)) {
-
-        }
+        $this->saveAuthClient($user->id, $authNetwork, $attributes);
 
         return $user->toArray();
     }

@@ -4,6 +4,7 @@ namespace frontend\modules\api\controllers;
 
 use backend\modules\user\api\User;
 use frontend\modules\api\components\MainController;
+use Yii;
 
 class UserController extends MainController
 {
@@ -36,7 +37,9 @@ class UserController extends MainController
     public function actionUpdate(): array
     {
         return $this->responseSuccess(
-            $this->api->update()
+            $this->api->update(
+                Yii::$app->request->post()
+            )
         );
     }
 

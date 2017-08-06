@@ -8,8 +8,8 @@ class m130524_201442_init extends Migration
     {
         $this->createTable('user', [
             'id' => $this->primaryKey(10)->unsigned(),
-            'auth_key' => $this->string()->notNull(),
-            'username' => $this->string()->notNull(),
+            'auth_key' => $this->string()->notNull()->unique(),
+            'username' => $this->string()->notNull()->unique() ,
             'first_name' => $this->string(),
             'last_name' => $this->string(),
             'email' => $this->string(),

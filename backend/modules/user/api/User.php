@@ -6,6 +6,7 @@ use common\models\UploadAvatar;
 use yii;
 use common\models\User as UserModel;
 use yii\web\UploadedFile;
+use common\exceptions;
 
 class User
 {
@@ -20,23 +21,35 @@ class User
     }
 
     /**
+     * @param array $data
      * @return array
+     * @throws exceptions\RequestException
      */
-    public function update()
+    public function update(array $data): array
     {
         $user = UserModel::findOne(Yii::$app->user->id);
-        $user->setAttributes(Yii::$app->request->post());
+        $user->setAttributes($data);
         $user->setTime();
 
-        $model = new UploadAvatar();
-        $model->image = UploadedFile::getInstanceByName('image');
-        if ($model->image && $model->upload()) {
-            $user->photo_url = $model->imageWebPath;
+        $img = new UploadAvatar();
+        $img->image = UploadedFile::getInstanceByName('image');
+
+
+        if ($img->image && !$img->validate()) {
+            throw exceptions\RequestException::invalidRequestError($img->getErrors());
+        }
+
+        if ($img->image && $img->upload()) {
+            $user->photo_url = $img->imageWebPath;
         }
 
         if (!$user->save()) {
-            $model->deleteImage();
-            p($user->errors);
+
+            if ($img->imagePath)  {
+                $img->deleteImage();
+            }
+
+            throw exceptions\RequestException::invalidRequestError($user->getErrors());
         }
 
         return $user->toArray();

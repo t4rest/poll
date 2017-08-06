@@ -77,7 +77,9 @@ class Feed
         }
 
         $choice->count += 1;
-        $choice->save();
+        if (!$choice->save()) {
+            throw exceptions\RequestException::invalidRequestError($choice->getErrors());
+        }
 
         $userChoice = new PollUserChoice();
         $userChoice->user_id = Yii::$app->user->id;
@@ -86,7 +88,7 @@ class Feed
         $userChoice->setTime();
 
         if (!$userChoice->save()) {
-            p($userChoice->errors);
+            throw exceptions\RequestException::invalidRequestError($userChoice->getErrors());
         }
 
         return true;

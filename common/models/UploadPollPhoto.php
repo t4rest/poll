@@ -4,7 +4,6 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 class UploadPollPhoto extends Model

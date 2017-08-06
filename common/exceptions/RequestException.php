@@ -32,4 +32,18 @@ class RequestException extends ApisException
 
         return self::create(Request::INVALID_REQUEST, $params);
     }
+
+    /**
+     * @param array $errors
+     * @return ApisException|static
+     */
+    public static function invalidRequestError(array $errors = [])
+    {
+        $params = [];
+        if (!empty($errors)) {
+            $params['message'] =  current($errors)[0];
+        }
+
+        return self::create(Request::INVALID_REQUEST, $params);
+    }
 } 
