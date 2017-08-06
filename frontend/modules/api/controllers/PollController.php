@@ -52,7 +52,7 @@ class PollController extends MainController
     {
         return $this->responseSuccess(
             $this->api->createPoll(
-                Yii::$app->request->post('choices', []),
+                Yii::$app->request->post('poll', []),
                 Yii::$app->request->post('choices', [])
             )
         );
