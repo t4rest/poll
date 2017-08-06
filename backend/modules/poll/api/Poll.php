@@ -127,7 +127,7 @@ class Poll
      * @param $id
      * @return array
      * @throws exceptions\AccessException
-     * @throws exceptions\RequestException
+     * @throws exceptions\DatabaseException
      */
     public function getPoll($id): array
     {
@@ -138,7 +138,7 @@ class Poll
             ->one();
 
         if (!$poll) {
-            throw exceptions\RequestException::invalidRequest('Poll does not exists');
+            throw exceptions\DatabaseException::recordNotFound('Poll does not exists');
         }
 
         if ($poll->user_id != Yii::$app->user->id) {
@@ -152,14 +152,14 @@ class Poll
      * @param $id
      * @return bool
      * @throws exceptions\AccessException
-     * @throws exceptions\RequestException
+     * @throws exceptions\DatabaseException
      */
     public function deletePoll($id): bool
     {
         $poll = PollModel::findone($id);
 
         if (!$poll) {
-            throw exceptions\RequestException::invalidRequest('Poll does not exists');
+            throw exceptions\DatabaseException::recordNotFound('Poll does not exists');
         }
 
         if ($poll->user_id != Yii::$app->user->id) {

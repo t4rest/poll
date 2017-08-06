@@ -70,7 +70,7 @@ class BaseAuthHandler
         $user = new User($data);
         $user->generateAuthKey();
         $user->setTime();
-        if ($user->save()) {
+        if (!$user->save()) {
             throw exceptions\RequestException::invalidRequestError($user->getErrors());
         }
 
