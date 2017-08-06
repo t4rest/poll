@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property string $created_at
  * @property string $updated_at
+ * @property mixed $friends
  * @property string $authKey
  */
 class User extends ActiveRecord implements IdentityInterface
