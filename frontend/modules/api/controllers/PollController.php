@@ -22,6 +22,9 @@ class PollController extends MainController
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function actionPolls(): array
     {
         $pagination = new pagination\OffsetBased(
@@ -41,6 +44,10 @@ class PollController extends MainController
         );
     }
 
+    /**
+     * @param $poll_id
+     * @return array
+     */
     public function actionPoll($poll_id): array
     {
         return $this->responseSuccess(
@@ -48,6 +55,9 @@ class PollController extends MainController
         );
     }
 
+    /**
+     * @return array
+     */
     public function actionCreatePoll(): array
     {
         return $this->responseSuccess(
@@ -58,10 +68,26 @@ class PollController extends MainController
         );
     }
 
+    /**
+     * @param $poll_id
+     * @return array
+     */
     public function actionDeletePoll($poll_id): array
     {
         return $this->responseSuccess(
             $this->api->deletePoll($poll_id)
+        );
+    }
+
+    /**
+     * @param $client
+     * @param $poll_id
+     * @return array
+     */
+    public function actionPost($poll_id, $client): array
+    {
+        return $this->responseSuccess(
+            $this->api->post($poll_id, $client)
         );
     }
 }

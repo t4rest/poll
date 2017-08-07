@@ -52,6 +52,8 @@ return [
 
         'POST api/poll/<poll_id:\d+>/choice/<choice_id:\d+>' => 'api/feed/vote',
 
+        'POST api/poll/<poll_id:\d+>/post/<client:\w+>' => 'api/poll/post',
+
         /**
          * base url rules
          */

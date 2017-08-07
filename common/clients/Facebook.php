@@ -2,9 +2,18 @@
 
 namespace common\clients;
 
+use common\clients\auth\TokenHandler;
+use yii\helpers\Json;
+use common\models\Auth;
+use common\models\Poll;
 use Yii;
 use yii\authclient\clients\Facebook as FacebookClient;
+use yii\authclient\OAuthToken;
 
+/**
+ *
+ * @property \common\models\Auth $clientToken
+ */
 class Facebook extends FacebookClient implements ClientInterface
 {
     use StateStorage;
@@ -30,6 +39,51 @@ class Facebook extends FacebookClient implements ClientInterface
         'timezone',
         'updated_time',
     ];
+
+    /**
+     * @param Auth $as
+     */
+    public function setClientToken(Auth $as)
+    {
+        $tokenOauth = new OAuthToken();
+        $tokenOauth->tokenParamKey = 'access_token';
+        $token = Json::decode($as->token);
+        $tokenOauth->createTimestamp = $token['created_at'] ?? time();
+        $tokenOauth->setParams($token);
+
+        if ($tokenOauth->getIsExpired() && $this->autoRefreshAccessToken) {
+            $tokenOauth = $this->refreshAccessToken($tokenOauth);
+
+            $tokenHandler = new TokenHandler();
+            $tokenHandler->client = $this;
+            $tokenHandler->saveAuthClient($as->user_id, $as);
+        }
+
+        parent::setAccessToken($token);
+    }
+
+    /**
+     * @param Poll $poll
+     * @return bool
+     */
+    public function post(Poll $poll): bool
+    {
+        try {
+
+            $params = array(
+                "access_token" => $this->getAccessToken()->token,
+                "message" => "#php #facebook",
+                "description" => "How to create a Facebook app."
+            );
+
+            $this->api('/me/feed', 'POST', $params);
+
+            return true;
+        } catch (\Exception $e) {
+            Yii::error($e->getMessage());
+            return false;
+        }
+    }
 
     /**
      * @return int
@@ -64,28 +118,6 @@ class Facebook extends FacebookClient implements ClientInterface
             'last_name' => $data['last_name'] ?? '',
             'photo_url' => $data['photo_url'] ?? '',
         ];
-    }
-
-    /**
-     * @return bool
-     */
-    public function post(): bool
-    {
-        try {
-
-            $params = array(
-                "access_token" => $this->getAccessToken()->token,
-                "message" => "#php #facebook",
-                "description" => "How to create a Facebook app."
-            );
-
-            $this->api('/me/feed', 'POST', $params);
-
-            return true;
-        } catch (\Exception $e) {
-            Yii::error($e->getMessage());
-            return false;
-        }
     }
 }
 

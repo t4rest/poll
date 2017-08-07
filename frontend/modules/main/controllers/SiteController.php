@@ -48,7 +48,7 @@ class SiteController extends MainController
 
     public function onAuthSuccess($client)
     {
-        (new AuthHandler($client))->handle();
+        (new AuthHandler($client))->auth();
     }
 
     public function actionIndex()

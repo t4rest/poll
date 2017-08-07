@@ -21,15 +21,9 @@ class AuthHandlerMobile extends BaseAuthHandler
      * @return array
      * @throws exceptions\RequestException
      */
-    public function handle($client, $token, $userId)
+    public function auth($client, $token, $userId=null)
     {
-        if (empty($client) || empty($token)) {
-            throw exceptions\RequestException::invalidRequest();
-        }
-
-        if (!in_array($client, $this->supportedClient)) {
-            throw exceptions\RequestException::invalidRequest('Client does not support');
-        }
+        BaseAuthHandler::validateClient($client);
 
         $this->client = Yii::$app->authClientCollection->getClient($client);
 
@@ -37,7 +31,6 @@ class AuthHandlerMobile extends BaseAuthHandler
         if ($client == Facebook::CODE) {
             $tokenOauth->tokenParamKey = 'access_token';
         }
-
         $tokenOauth->setParams($token);
 
         $this->client->setAccessToken($tokenOauth);

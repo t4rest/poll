@@ -28,7 +28,7 @@ class NetworkController extends BaseController
     public function actionIndex(): array
     {
         return $this->responseSuccess(
-            $this->api->handle(
+            $this->api->auth(
                 Yii::$app->request->post('client'),
                 Yii::$app->request->post('token', [])
             )

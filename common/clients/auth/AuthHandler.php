@@ -7,7 +7,6 @@ use common\clients\Facebook;
 use common\clients\Twitter;
 use common\models\Auth;
 use common\models\User;
-use common\exceptions;
 use Yii;
 
 /**
@@ -22,14 +21,12 @@ class AuthHandler extends BaseAuthHandler
      */
     public function __construct(ClientInterface $client)
     {
-        if (!in_array($client->getId(), $this->supportedClient)) {
-            throw exceptions\RequestException::invalidRequest('Client does not support');
-        }
+        BaseAuthHandler::validateClient($client->getId());
 
         $this->client = $client;
     }
 
-    public function handle()
+    public function auth()
     {
         $attributes = $this->client->getUserAttributes();
         $authNetwork = Auth::findOne(['id' => $attributes['id'], 'source_id' => $this->client->getClientId()]);

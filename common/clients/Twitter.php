@@ -2,13 +2,18 @@
 
 namespace common\clients;
 
+use common\clients\auth\TokenHandler;
+use common\models\Auth;
+use common\models\Poll;
 use Yii;
 use yii\authclient\clients\Twitter as TwitterClient;
+use yii\authclient\OAuthToken;
 
 /**
  * Class Twitter
  * @package common\clients
  *
+ * @property \common\models\Auth $clientToken
  * @property int $clientId
  */
 class Twitter extends TwitterClient implements ClientInterface
@@ -26,10 +31,29 @@ class Twitter extends TwitterClient implements ClientInterface
         return self::ID;
     }
 
+    public function setClientToken(Auth $as)
+    {
+        $tokenOauth = new OAuthToken();
+        $token = yii\helpers\Json::decode($as->token);
+        $tokenOauth->createTimestamp = $token['created_at'] ?? time();
+        $tokenOauth->setParams($token);
+
+        if ($tokenOauth->getIsExpired() && $this->autoRefreshAccessToken) {
+            $tokenOauth = $this->refreshAccessToken($tokenOauth);
+
+            $tokenHandler = new TokenHandler();
+            $tokenHandler->client = $this;
+            $tokenHandler->saveAuthClient($as->user_id, $as);
+        }
+
+        parent::setAccessToken($token);
+    }
+
     /**
+     * @param Poll $poll
      * @return bool
      */
-    public function post(): bool
+    public function post(Poll $poll): bool
     {
         try {
 

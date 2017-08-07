@@ -2,7 +2,10 @@
 
 namespace backend\modules\poll\api;
 
+use common\clients\auth\BaseAuthHandler;
+use common\clients\ClientInterface;
 use common\exceptions;
+use common\models\Auth;
 use common\models\UploadPollPhoto;
 use common\models\UploadPollPhotos;
 use yii;
@@ -167,6 +170,34 @@ class Poll
         }
 
         return (bool)$poll->delete();
+    }
+
+    public function post($id, $client)
+    {
+        $poll = PollModel::findone($id);
+
+        if (!$poll) {
+            throw exceptions\DatabaseException::recordNotFound('Poll does not exists');
+        }
+
+        if ($poll->user_id != Yii::$app->user->id) {
+            throw exceptions\AccessException::deniedPermission();
+        }
+
+        BaseAuthHandler::validateClient($client);
+
+        /**
+         * @var ClientInterface $client
+         */
+        $client = Yii::$app->authClientCollection->getClient($client);
+
+        $as = Auth::find()
+            ->where(['user_id' => Yii::$app->user->id, 'source_id' => $client->getClientId()])
+            ->one();
+
+        $client->setClientToken($as);
+
+        return $client->post($poll);
     }
 
 //    /**
