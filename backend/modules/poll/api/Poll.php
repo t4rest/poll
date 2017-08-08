@@ -3,7 +3,10 @@
 namespace backend\modules\poll\api;
 
 use common\clients\auth\BaseAuthHandler;
+use common\clients\auth\TokenHandler;
 use common\clients\ClientInterface;
+use common\clients\Facebook;
+use common\clients\Twitter;
 use common\exceptions;
 use common\models\Auth;
 use common\models\UploadPollPhoto;
@@ -11,6 +14,8 @@ use common\models\UploadPollPhotos;
 use yii;
 use common\models\Poll as PollModel;
 use common\models\PollChoice;
+use yii\authclient\OAuthToken;
+use yii\helpers\Json;
 use yii\web\UploadedFile;
 use common\pagination;
 
@@ -187,17 +192,33 @@ class Poll
         BaseAuthHandler::validateClient($client);
 
         /**
-         * @var ClientInterface $client
+         * @var ClientInterface|Facebook|Twitter $clientApi
          */
-        $client = Yii::$app->authClientCollection->getClient($client);
+        $clientApi = Yii::$app->authClientCollection->getClient($client);
 
         $as = Auth::find()
-            ->where(['user_id' => Yii::$app->user->id, 'source_id' => $client->getClientId()])
+            ->where(['user_id' => Yii::$app->user->id, 'source_id' => $clientApi->getClientId()])
             ->one();
 
-        $client->setClientToken($as);
+        $token = Json::decode($as->token);
 
-        return $client->post($poll);
+        $tokenOauth = new OAuthToken();
+        if ($client == Facebook::CODE) {
+            $tokenOauth->tokenParamKey = 'access_token';
+        }
+        $tokenOauth->setParams($token);
+
+        if ($tokenOauth->getIsExpired() && $clientApi->autoRefreshAccessToken) {
+            $tokenOauth = $clientApi->refreshAccessToken($tokenOauth);
+
+            $tokenHandler = new TokenHandler();
+            $tokenHandler->client = $clientApi;
+            $tokenHandler->saveAuthClient($as->user_id, $as);
+        }
+
+        $clientApi->setAccessToken($tokenOauth);
+
+        return $clientApi->post($poll);
     }
 
 //    /**

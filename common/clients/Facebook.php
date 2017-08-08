@@ -41,28 +41,6 @@ class Facebook extends FacebookClient implements ClientInterface
     ];
 
     /**
-     * @param Auth $as
-     */
-    public function setClientToken(Auth $as)
-    {
-        $tokenOauth = new OAuthToken();
-        $tokenOauth->tokenParamKey = 'access_token';
-        $token = Json::decode($as->token);
-        $tokenOauth->createTimestamp = $token['created_at'] ?? time();
-        $tokenOauth->setParams($token);
-
-        if ($tokenOauth->getIsExpired() && $this->autoRefreshAccessToken) {
-            $tokenOauth = $this->refreshAccessToken($tokenOauth);
-
-            $tokenHandler = new TokenHandler();
-            $tokenHandler->client = $this;
-            $tokenHandler->saveAuthClient($as->user_id, $as);
-        }
-
-        parent::setAccessToken($token);
-    }
-
-    /**
      * @param Poll $poll
      * @return bool
      */
@@ -71,9 +49,10 @@ class Facebook extends FacebookClient implements ClientInterface
         try {
 
             $params = array(
-                "access_token" => $this->getAccessToken()->token,
-                "message" => "#php #facebook",
-                "description" => "How to create a Facebook app."
+                "access_token" => $this->getAccessToken()->getToken(),
+                "message" => $poll->text,
+                "picture" => $poll->photo_url,
+                "link" => 'http://edvice.loc/poll/' . $poll->id
             );
 
             $this->api('/me/feed', 'POST', $params);

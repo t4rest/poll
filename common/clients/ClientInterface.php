@@ -11,7 +11,5 @@ interface ClientInterface
 
     public function getUserDbAttributes(array $data = []): array;
 
-    public function setClientToken(Auth $as);
-
     public function post(Poll $poll): bool;
 }

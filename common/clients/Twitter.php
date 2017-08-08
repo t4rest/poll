@@ -31,24 +31,6 @@ class Twitter extends TwitterClient implements ClientInterface
         return self::ID;
     }
 
-    public function setClientToken(Auth $as)
-    {
-        $tokenOauth = new OAuthToken();
-        $token = yii\helpers\Json::decode($as->token);
-        $tokenOauth->createTimestamp = $token['created_at'] ?? time();
-        $tokenOauth->setParams($token);
-
-        if ($tokenOauth->getIsExpired() && $this->autoRefreshAccessToken) {
-            $tokenOauth = $this->refreshAccessToken($tokenOauth);
-
-            $tokenHandler = new TokenHandler();
-            $tokenHandler->client = $this;
-            $tokenHandler->saveAuthClient($as->user_id, $as);
-        }
-
-        parent::setAccessToken($token);
-    }
-
     /**
      * @param Poll $poll
      * @return bool
