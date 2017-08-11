@@ -200,6 +200,10 @@ class Poll
             ->where(['user_id' => Yii::$app->user->id, 'source_id' => $clientApi->getClientId()])
             ->one();
 
+        if (empty($as)) {
+            throw exceptions\DatabaseException::recordNotFound("Client {$client} does not exists");
+        }
+
         $token = Json::decode($as->token);
 
         $tokenOauth = new OAuthToken();

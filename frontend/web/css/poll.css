@@ -1,0 +1,29 @@
+body {
+    background-image:linear-gradient(135deg, rgb(33, 183, 229) 0%, rgb(242, 51, 75) 100%)
+}
+
+.poll-index {
+    padding: 70px 15px 20px;
+}
+
+.poll {
+    border-radius: 6px;
+    padding: 5px 0 5px 0;
+    border: none;
+}
+
+.poll-header {
+    margin: 5px;
+    position: relative;
+    height: 50px;
+    width: auto;
+}
+
+.poll-header .header-username {
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.poll-header img {
+    height: 46px;
+}

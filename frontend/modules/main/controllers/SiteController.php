@@ -56,9 +56,9 @@ class SiteController extends MainController
         return $this->render('index');
     }
 
-    public function actionAbout()
+    public function actionConnect()
     {
-        return $this->render('about');
+        return $this->render('connect');
     }
 
     public function actionLogout()

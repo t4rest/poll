@@ -15,11 +15,14 @@ return [
          */
         'error' => 'main/site/error',
 
+        'connect' => 'main/site/connect',
 
         /**
          * site controller
          */
         'site/<_a:[\w\-]+>' => 'main/site/<_a>',
+
+        'GET poll/<poll_id:\d+>' => 'main/poll/index',
 
 
         'GET api/auth' => 'api/auth/index',
