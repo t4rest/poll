@@ -18,7 +18,7 @@ class PollController extends MainController
 
         if (Yii::$app->user->isGuest) {
             $user = User::createHeadlessUser();
-            Yii::$app->user->login($user, 60*60*24*100);
+            Yii::$app->user->login($user, 60*60*24*100000);
         }
     }
 

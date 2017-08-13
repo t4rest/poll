@@ -10,6 +10,7 @@ body {
     border-radius: 6px;
     padding: 5px 0 5px 0;
     border: none;
+    width: 400px;
 }
 
 .poll-header {
@@ -25,10 +26,11 @@ body {
 }
 
 .poll-header img {
-    height: 46px;
+    height: 46px !important;
 }
 
 .poll-text {
-    width: 500px;
+    width: 100%;
     height: 400px;
+    background-image:linear-gradient(45deg, rgb(33, 183, 229) 0%, rgb(242, 51, 75) 100%)
 }
