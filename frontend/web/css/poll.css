@@ -27,3 +27,8 @@ body {
 .poll-header img {
     height: 46px;
 }
+
+.poll-text {
+    width: 500px;
+    height: 400px;
+}

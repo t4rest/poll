@@ -23,6 +23,7 @@ return [
         'site/<_a:[\w\-]+>' => 'main/site/<_a>',
 
         'GET poll/<poll_id:\d+>' => 'main/poll/index',
+        'GET poll/<poll_id:\d+>/choice/<choice_id:\d+>' => 'main/poll/vote',
 
 
         'GET api/auth' => 'api/auth/index',

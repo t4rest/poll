@@ -21,6 +21,7 @@ use yii\web\IdentityInterface;
  * @property integer $timezone
  * @property integer $locale
  * @property integer $status
+ * @property integer $is_headless
  * @property string $created_at
  * @property string $updated_at
  * @property mixed $friends
@@ -30,6 +31,8 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
+
+    const HEADLESS = 1;
 
     public static function tableName()
     {
@@ -44,7 +47,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'email'],
             [['country', 'timezone', 'locale'], 'integer'],
             ['username', 'unique'],
-            ['username', 'match', 'pattern' => '/^[a-z]\w*$/i'],
+            ['username', 'match', 'pattern' => '/^[a-z1-9]\w*$/i'],
             [['username', 'first_name', 'last_name'], 'string', 'max' => 100],
             [['username', 'first_name', 'last_name', 'email', 'country', 'timezone', 'locale'], 'safe', 'on' => ['update']],
         ];
@@ -59,6 +62,21 @@ class User extends ActiveRecord implements IdentityInterface
         $this->updated_at = $time;
     }
 
+    /**
+     * @return User
+     */
+    public static function createHeadlessUser()
+    {
+        $user = new self();
+        $user->setTime();
+        $user->username = uniqid() . time();
+        $user->generateAuthKey();
+        $user->is_headless = self::HEADLESS;
+        $user->status = self::STATUS_ACTIVE;
+        $user->save();
+
+        return $user;
+    }
 
 
     /**

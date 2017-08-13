@@ -5,6 +5,7 @@
 
 $this->title = 'Edvice';
 use frontend\assets\PollAsset;
+use yii\helpers\Url;
 
 PollAsset::register($this);
 ?>
@@ -22,19 +23,42 @@ PollAsset::register($this);
                         <span class="header-username pull-right"><?php echo $poll->user->username; ?></span>
                     </a>
                 </div>
+                <?php if ($poll->photo_url):?>
                 <img src="<?php echo $poll->photo_url; ?>" />
+                <?php else: ?>
+                    <div class="poll-text"><?php echo $poll->text; ?></div>
+                <?php endif;?>
+
 
                 <div class="caption">
 
-                    <p><?php echo $poll->text; ?></p>
+                    <?php if ($poll->photo_url):?>
+                        <p><?php echo $poll->text; ?></p>
+                    <?php endif;?>
 
-                    <?php foreach ($poll->choices as $choice): ?>
-                    <p>
-                        <a href="javascript:void(0);" class="btn btn-primary" role="button">
-                            <?php echo $choice->text;?>
-                        </a>
-                    </p>
-                    <?php endforeach;?>
+
+                    <?php if ($poll->pollUserChoice) :?>
+
+                        <?php foreach ($poll->choices as $choice): ?>
+                            <p>
+                                <a href="javascript:void(0);" class="btn btn-default" role="button">
+                                    <?php echo $choice->text;?>
+                                </a>
+                            </p>
+                        <?php endforeach;?>
+
+                    <?php else: ?>
+
+                        <?php foreach ($poll->choices as $choice): ?>
+                            <p>
+                                <a href="<?php echo Url::to(['/main/poll/vote', 'poll_id' => $poll->id, 'choice_id' => $choice->id], true); ?>" class="btn btn-primary" role="button">
+                                    <?php echo $choice->text;?>
+                                </a>
+                            </p>
+                        <?php endforeach;?>
+
+                    <?php endif;?>
+
                  </div>
             </div>
         </div>

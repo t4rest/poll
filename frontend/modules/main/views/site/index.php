@@ -47,7 +47,7 @@ MainAsset::register($this);
 
         .img-responsive{
             height: 90%;
-        }
+        }176px
     }
 
 
