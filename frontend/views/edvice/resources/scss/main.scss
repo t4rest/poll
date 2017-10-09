@@ -1,0 +1,44 @@
+@charset 'UTF-8';
+
+// 1. vendors
+// @import 
+//   'vendors/bootstrap',
+//   'vendors/jquery-ui';
+
+// 2. utilities(helpers), variables, functions, mixins, helpers
+@import 
+  'utils/variables',
+  'utils/functions',
+  'utils/mixins',
+  'utils/helpers';
+
+// 3. base, Reset/normilize, typography, base styles etc.
+@import 
+  'base/reset',
+  'base/typography',
+  'base/base';
+
+// 4. layouts(partials), navigation, grid, header, footer, sidebar, forms etc.
+@import 
+  'layout/navigation',
+  'layout/grid',
+  'layout/header',
+  'layout/footer',
+  'layout/sidebar',
+  'layout/forms';
+
+// 5. components(modules), buttons, carousel, sliders, dropdown etc.
+@import 
+  'components/buttons',
+  'components/carousel',
+  'components/dropdown';
+
+// 6. pages, styles for pages, for main page or cintacts page etc.
+@import 
+  'pages/main',
+  'pages/post';
+
+// 7. themes, if they exist
+// @import 
+//   'themes/theme',
+//   'themes/admin';

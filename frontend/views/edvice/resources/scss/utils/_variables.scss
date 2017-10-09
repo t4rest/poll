@@ -1,0 +1,26 @@
+/* fonts family Optional depend of weight*/
+
+$light: 100;
+$regular: 500;
+$bold: 900;
+
+$playFair: 'Playfair Display', serif;
+
+/* font colors */
+$white: #ffffff;
+$black: #000000;
+
+$yellow: #FFE338;
+
+/* other width variables */
+
+$max-content-width: 1920px;
+$min-content-width: 1152px;
+
+/* other height variables */
+
+$footer-height: 390px;
+
+// icons 
+.icon-support:before { content: '\e800'; } /* '' */
+.icon-developing:before { content: '\e801'; } /* '' */

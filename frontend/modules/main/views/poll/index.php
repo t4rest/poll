@@ -4,66 +4,111 @@
 /* @var $poll \common\models\Poll */
 
 $this->title = 'Edvice';
-use frontend\assets\PollAsset;
 use yii\helpers\Url;
 
-PollAsset::register($this);
 ?>
-<div class="poll-index">
-
-    <div class="row">
-        <div class="col-sm-6 col-md-4">
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail poll">
-                <div class="poll-header">
-
-                    <a href="#" class="pull-left">
-                        <img src="<?php echo $poll->user->photo_url?>" class="avatar img-circle pull-left">
-                        <span class="header-username pull-right"><?php echo $poll->user->username; ?></span>
-                    </a>
-                </div>
-                <?php if ($poll->photo_url):?>
-                <img src="<?php echo $poll->photo_url; ?>" />
-                <?php else: ?>
-                    <div class="poll-text"><?php echo $poll->text; ?></div>
-                <?php endif;?>
-
-
-                <div class="caption">
-
-                    <?php if ($poll->photo_url):?>
-                        <p><?php echo $poll->text; ?></p>
-                    <?php endif;?>
-
-
-                    <?php if ($poll->pollUserChoice) :?>
-
-                        <?php foreach ($poll->choices as $choice): ?>
-                            <p>
-                                <a href="javascript:void(0);" class="btn btn-default" role="button">
-                                    <?php echo $choice->text;?>
-                                </a>
-                            </p>
-                        <?php endforeach;?>
-
-                    <?php else: ?>
-
-                        <?php foreach ($poll->choices as $choice): ?>
-                            <p>
-                                <a href="<?php echo Url::to(['/main/poll/vote', 'poll_id' => $poll->id, 'choice_id' => $choice->id], true); ?>" class="btn btn-primary" role="button">
-                                    <?php echo $choice->text;?>
-                                </a>
-                            </p>
-                        <?php endforeach;?>
-
-                    <?php endif;?>
-
-                 </div>
+<div class="page post">
+    <div class="container-fluid">
+        <div class="row align-items-center post-page-header">
+            <div class="col-12 col-md-6">
+                <a class="logo" src="#"><span class="logo-img"></span><span class="logo-text">Edvice</span></a>
+            </div>
+            <div class="col-12 col-md-6">
+                <a href="#" class="create-poll-btn">Create your poll</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
+
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="post-block">
+                    <div class="post-header">
+                        <a href="#" class="post-creator">
+                            <span class="post-creator-avatar">
+                                <img src="<?php echo $poll->user->photo_url ?>" alt="" class="post-creator-avatar-img">
+                            </span>
+                            <span class="post-creator-data">
+                                <span class="post-creator-name"><?php echo $poll->user->username; ?></span>
+                                <span class="post-time-create">1 minute left</span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="post-body">
+
+                        <?php if ($poll->photo_url): ?>
+                            <div class="post-image">
+                                <img src="/img/img.jpg" alt="">
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="post-question"><?php echo $poll->text; ?> </div>
+                        <?php if ($poll->pollUserChoice) : ?>
+                            <div class="post-results">
+                                <?php foreach ($poll->choices as $choice): ?>
+                                    <div class="post-result <?php echo ($poll->pollUserChoice->choice_id == $choice->id) ? 'is-chosen' : ''; ?>">
+                                        <div class="post-result-line" style="width: 59%"></div>
+                                        <div class="post-result-text"><?php echo $choice->text; ?> <span
+                                                    class="post-result-text-icon"></span>
+                                        </div>
+                                        <div class="post-result-percent">59%</div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+
+                        <?php else: ?>
+
+                            <div class="post-variants">
+                                <?php foreach ($poll->choices as $choice): ?>
+                                    <p>
+                                        <button href="<?php echo Url::to(['/main/poll/vote', 'poll_id' => $poll->id, 'choice_id' => $choice->id], true); ?>"
+                                                class="post-variant" role="button">
+                                            <?php echo $choice->text; ?>
+                                        </button>
+                                    </p>
+                                <?php endforeach; ?>
+                            </div>
+
+                        <?php endif; ?>
+
+
+                    </div>
+                </div>
+                <div class="success-message">
+                    <span>Thanks for you vote! </span><br>Try to create your poll.
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
+
+<div class="overlay">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="overlay-wrapper">
+                    <div class="img-overlay">
+                        <img src="/img/img-big.jpg" alt="">
+                    </div>
+                    <button class="close-overlay"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+    //    $('.post-variant').on('click', function (){
+    //        $(this).parent().slideUp();
+    //        $('.post-results').slideDown();
+    //        $('.success-message').fadeIn();
+    //    });
+
+    $('.post-image').on('click', function () {
+        $('.overlay').fadeIn();
+    });
+
+    $('.close-overlay').on('click', function () {
+        $('.overlay').fadeOut();
+    });
+</script>

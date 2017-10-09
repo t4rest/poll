@@ -1,0 +1,20 @@
+@each $font-face in 'AvenirNext-Bold', 'AvenirNext-DemiBold', 'AvenirNext-Heavy', 'AvenirNext-Medium', 'sfuitext-bold', 'sfuitext-medium', 'sfuitext-regular' {
+	@font-face{
+		font-family: $font-face; font-style: normal; font-weight: normal;
+		src: 
+			url('fonts/#{$font-face}.woff2') format('woff2'), 
+			url('fonts/#{$font-face}.woff') format('woff'), 
+			url('fonts/#{$font-face}.ttf') format('truetype'); 
+	}
+}
+
+/**
+ * Basic typography style for copy text
+ */
+body {
+	font: {
+		size: 100%;
+		family: 'AvenirNext-Medium', sans-serif;
+	}
+  	line-height: 24px;
+}

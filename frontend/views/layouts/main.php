@@ -5,9 +5,9 @@
 
 use yii\helpers\Html;
 
-use frontend\assets\SiteAsset;
+use frontend\assets\MainAsset;
 
-SiteAsset::register($this);
+MainAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -23,9 +23,7 @@ SiteAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="container-fluid">
-    <?= $content ?>
-</div>
+<?= $content ?>
 
 <?php $this->endBody() ?>
 </body>

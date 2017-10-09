@@ -79,7 +79,7 @@ class Facebook extends FacebookClient implements ClientInterface
     {
         $data = parent::initUserAttributes();
 
-        $data['photo_url'] = $this->apiBaseUrl . '/' . $data['id'] . '/picture?width=100&height=100';
+        $data['photo_url'] = $this->apiBaseUrl . '/' . $data['id'] . '/picture?width=800&height=800';
 
         return $data;
     }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon-16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-28.png" sizes="28x28">
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-48.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
+    <link rel="apple-touch-icon" sizes="57x57" href="/touch-icon.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/touch-icon_144.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/touch-icon-ipad-pro_167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/touch-icon-ipad-retina_152.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/touch-icon-ipad_76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-iphone-retina_120.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/touch-icon-iphone6_180.png">
+  </head>
+  <body></body>
+  <div class="page post">
+    <div class="container-fluid">
+      <div class="row align-items-center post-page-header">
+        <div class="col-12 col-md-6">
+          <a class="logo" src="#"><span class="logo-img"></span><span class="logo-text">Edvice</span></a>
+        </div>
+        <div class="col-12 col-md-6">
+          <a href="#" class="create-poll-btn">Create your poll</a>
+        </div>
+      </div>
+
+      <div class="row align-items-center">
+        <div class="col-12">
+          <div class="post-block">
+            <div class="post-header">
+              <a href="#" class="post-creator">
+                <span class="post-creator-avatar"><img src="/img/avatar.jpg" alt="" class="post-creator-avatar-img"></span>
+                <span class="post-creator-data">
+                  <span class="post-creator-name">tuhnec</span>
+                  <span class="post-time-create">1 minute left</span>
+                </span>
+              </a>
+            </div>
+            <div class="post-body">
+              <div class="post-image">
+                <img src="/img/img.jpg" alt="">
+              </div>
+              <div class="post-question">What do you think about new mans Gucci collection? </div>
+              <div class="post-variants">
+                <button class="post-variant">Amazing</button>
+                <button class="post-variant">Good</button>
+                <button class="post-variant">Might be better</button>
+                <button class="post-variant">Bad</button>
+              </div>
+              <div class="post-results">
+                <div class="post-result is-chosen">
+                  <div class="post-result-line" style="width: 59%"></div>
+                  <div class="post-result-text">Amazing <span class="post-result-text-icon"></span></div>
+                  <div class="post-result-percent">59%</div>
+                </div>
+                <div class="post-result">
+                  <div class="post-result-line" style="width: 21%"></div>
+                  <div class="post-result-text">Good <span class="post-result-text-icon"></span></div>
+                  <div class="post-result-percent">21%</div>
+                </div>
+                <div class="post-result">
+                  <div class="post-result-line" style="width: 13%"></div>
+                  <div class="post-result-text">Might be better <span class="post-result-text-icon"></span></div>
+                  <div class="post-result-percent">13%</div>
+                </div>
+                <div class="post-result">
+                  <div class="post-result-line" style="width: 7%"></div>
+                  <div class="post-result-text">Bad <span class="post-result-text-icon"></span></div>
+                  <div class="post-result-percent">7%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="success-message">
+            <span>Thanks for you vote! </span><br>Try to create your poll.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col">
+          <div class="overlay-wrapper">
+            <div class="img-overlay">
+              <img src="/img/img-big.jpg" alt="">
+            </div>
+            <button class="close-overlay"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script>
+    $('.post-variant').on('click', function (){
+      $(this).parent().slideUp();
+      $('.post-results').slideDown();
+      $('.success-message').fadeIn();
+    });
+
+    $('.post-image').on('click', function(){
+      $('.overlay').fadeIn(); 
+    });
+
+    $('.close-overlay').on('click', function(){
+      $('.overlay').fadeOut(); 
+    });
+  </script>
+
+</html>

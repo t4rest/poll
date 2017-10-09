@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch Beta 47 (45392) - http://www.bohemiancoding.com/sketch -->
+    <title>check</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Web-Post" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tablet-Post-After-Vote" transform="translate(-313.000000, -647.000000)" fill-rule="nonzero" fill="#000000">
+            <g id="Post" transform="translate(217.000000, 185.000000)">
+                <g id="Buttons" transform="translate(12.000000, 449.000000)">
+                    <g id="Button">
+                        <g id="check" transform="translate(84.000000, 13.000000)">
+                            <path d="M7,14 C3.13400675,14 0,10.8659932 0,7 C0,3.13400675 3.13400675,0 7,0 C10.8659932,0 14,3.13400675 14,7 C14,10.8659932 10.8659932,14 7,14 Z M7,12.4444444 C10.0068836,12.4444444 12.4444444,10.0068836 12.4444444,7 C12.4444444,3.99311636 10.0068836,1.55555556 7,1.55555556 C3.99311636,1.55555556 1.55555556,3.99311636 1.55555556,7 C1.55555556,10.0068836 3.99311636,12.4444444 7,12.4444444 Z M5.49676344,5.87352333 L6.8023261,7.30964226 L9.22388483,4.34995937 L10.4278184,5.33499594 L6.86434056,9.69035774 L4.34574555,6.91990323 L5.49676344,5.87352333 Z"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
