@@ -8,12 +8,12 @@ $this->title = 'Edvice';
 <div class="page main">
     <div class="container-fluid">
         <div class="row align-items-center">
-            <div class="col-12 col-lg-6 main-text"><a class="logo" src="#"><span class="logo-img"></span><span class="logo-text">Edvice</span></a>
-                <p class="intro">Create pools like in sims, but don’t remove the ladder.</p>
+            <div class="col-12 col-lg-6 main-text"><a class="logo" href="/"><span class="logo-img"></span><span class="logo-text">Edvice</span></a>
+                <p class="intro">Create polls like in sims, but don’t remove the ladder.</p>
                 <p>All the rumors have finally died down and many skeptics have tightened their lips, the iPod does support video format now on its fifth generation. </p>
                 <div class="app-links-list">
-                    <a class="app-link app-store" target=_blank href="#"></a>
-                    <a class="app-link google-play" target=_blank href="#"><span class="app-link-note">*Will Availible Soon</span></a>
+                    <a class="app-link app-store" target=_blank href="/"></a>
+                    <a class="app-link google-play" target=_blank href="/"><span class="app-link-note">*Will Available Soon</span></a>
                 </div>
             </div>
             <div class="col-12 col-lg-6 main-image">

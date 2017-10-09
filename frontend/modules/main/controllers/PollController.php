@@ -25,7 +25,9 @@ class PollController extends MainController
     public function actionIndex($poll_id)
     {
         $poll = Poll::find()
-            ->with(['choices', 'pollUserChoice' => function (\yii\db\ActiveQuery $queryVote) {
+            ->with(['choices' => function (\yii\db\ActiveQuery $queryChoice) {
+                $queryChoice->orderBy('id');
+            }, 'pollUserChoice' => function (\yii\db\ActiveQuery $queryVote) {
                 $queryVote->where(['user_id' => Yii::$app->user->id]);
             }])
             ->with('user')
