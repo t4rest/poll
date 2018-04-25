@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $poll \common\models\Poll */
 
-$this->title = 'Edvice';
+$this->title = 'poll';
 use yii\helpers\Url;
 
 ?>
@@ -11,7 +11,7 @@ use yii\helpers\Url;
     <div class="container-fluid">
         <div class="row align-items-center post-page-header">
             <div class="col-12 col-md-6">
-                <a class="logo" href="/"><span class="logo-img"></span><span class="logo-text">Edvice</span></a>
+                <a class="logo" href="/"><span class="logo-img"></span><span class="logo-text">poll</span></a>
             </div>
             <div class="col-12 col-md-6">
                 <a href="/" class="create-poll-btn">Create your poll</a>

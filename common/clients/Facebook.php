@@ -52,7 +52,7 @@ class Facebook extends FacebookClient implements ClientInterface
                 "access_token" => $this->getAccessToken()->getToken(),
                 "message" => $poll->text,
                 "picture" => $poll->photo_url,
-                "link" => 'http://edvice.loc/poll/' . $poll->id
+                "link" => 'http://poll.loc/poll/' . $poll->id
             );
 
             $this->api('/me/feed', 'POST', $params);

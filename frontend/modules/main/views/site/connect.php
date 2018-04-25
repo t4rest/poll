@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Edvice';
+$this->title = 'poll';
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>

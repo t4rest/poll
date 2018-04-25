@@ -1,8 +1,7 @@
 {
-    "name": "edvice",
-    "description": "Edvice app",
-    "keywords": ["Edvice"],
-    "homepage": "http://www.edvice.com/",
+    "name": "poll",
+    "description": "poll app",
+    "keywords": ["poll"],
     "type": "project",
     "minimum-stability": "dev",
     "require": {
