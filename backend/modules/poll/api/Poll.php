@@ -10,7 +10,6 @@ use common\clients\Twitter;
 use common\exceptions;
 use common\models\Auth;
 use common\models\UploadPollPhoto;
-use common\models\UploadPollPhotos;
 use yii;
 use common\models\Poll as PollModel;
 use common\models\PollChoice;
@@ -68,9 +67,6 @@ class Poll
         $image = new UploadPollPhoto();
         $image->image = UploadedFile::getInstanceByName('image');
 
-        $images = new UploadPollPhotos();
-        $images->images = UploadedFile::getInstancesByName('images');
-
         $tr = PollModel::getDb()->beginTransaction();
 
         try {
@@ -80,13 +76,6 @@ class Poll
             $poll->user_id = Yii::$app->user->id;
             $poll->setTime();
 
-            if ($images->images && !$images->validate()) {
-                throw exceptions\RequestException::invalidRequestError($images->getErrors());
-            }
-
-            if ($images->images && $images->upload()) {
-                $poll->photos_url = $images->imagesWebPath;
-            }
 
             if ($image->image && !$image->validate()) {
                 throw exceptions\RequestException::invalidRequestError($image->getErrors());
@@ -116,9 +105,6 @@ class Poll
             $tr->commit();
         } catch (yii\base\Exception $e) {
             $tr->rollBack();
-            if ($images->imagesPath) {
-                $images->deleteImages();
-            }
 
             if ($image->imagePath) {
                 $image->deleteImage();

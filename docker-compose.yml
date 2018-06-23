@@ -1,0 +1,35 @@
+  db:
+    restart: always
+    container_name: poll-api-mysql
+    ports:
+      - "3306:3306"
+    build: docker/mysql
+    volumes:
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - storage:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "123"
+
+  nginx:
+    restart: always
+    container_name: poll-api-nginx
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/src
+      - ./logs/nginx/:/logs
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+    links:
+     - php
+
+  php:
+    restart: always
+    container_name: poll-api-php
+    build: docker/php
+    volumes:
+      - ./:/src
+
+volumes:
+  storage:
